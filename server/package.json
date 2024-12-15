@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "this is the backend for the myAi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/praneeth4040/myAi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/praneeth4040/myAi/issues"
+  },
+  "homepage": "https://github.com/praneeth4040/myAi#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.0"
+  }
+}
