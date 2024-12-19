@@ -17,6 +17,9 @@ app.post('/askAi',async(req,res)=>{
         res.status(400).json("give correct prompt");
     }
 })
+app.get('/',(req,res)=>{
+    res.json("hello");
+})
 app.listen(PORT , ()=>{
     console.log(`the app is listening to`,PORT);
 })
