@@ -30,7 +30,7 @@ function App() {
     <input
   className="form-control"
   type="text"
-  defaultValue="ask me."
+  placeholder='ask me anything buddy'
   aria-label="readonly input example"
   readOnly=""
 />
