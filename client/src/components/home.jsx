@@ -9,6 +9,7 @@ function Home() {
       };
     
     return ( <>
+
     home app
    <div style={backgroundImageStyle}>
    </div>
@@ -25,6 +26,8 @@ function Home() {
 />
 
     </footer>
+
+
     </> );
 }
 
