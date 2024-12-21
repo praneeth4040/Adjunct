@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css'
-import Navbar from './componets/navbar';
-import Home from './componets/home';
-import LoginPage from './componets/login';
-import Profile from './componets/profile';
+import Navbar from './components/navbar';
+import Home from './components/home';
+import LoginPage from './components/login';
+import Profile from './components/profile';
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 
 function App() {
@@ -26,7 +26,16 @@ function App() {
     
     <RouterProvider router={router}/>
     
-    
+    <footer>
+    <input
+  className="form-control"
+  type="text"
+  defaultValue="ask me."
+  aria-label="readonly input example"
+  readOnly=""
+/>
+
+    </footer>
 </>
 
     
