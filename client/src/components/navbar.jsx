@@ -1,35 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 function Navbar() {
-    return ( <>
-    <div>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">myAi</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <Link class="nav-link active" aria-current="page" to="/login">login</Link>
-        </li>
-        <li class="nav-item">
-          <Link class="nav-link" to="/">home</Link>
-        </li>
-        <li class="nav-item">
-          <Link class="nav-link" to="/profile">profile</Link>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href='/login' aria-disabled="false">profile</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-   
-    </div>
-    </> );
+    return (
+        <>
+            <div>
+                <nav className="navbar navbar-expand-lg bg-body-tertiary">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" href="#">myAi</a>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <ul className="navbar-nav ms-auto">
+                                <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/">home</Link>
+                                </li>
+                                <li className="nav-item" style={{ marginLeft: '20px' }}>
+                                    <button style={{ borderRadius: '10px' }}><Link className="nav-link active" to="/login">Login</Link></button>
+                                </li>
+                                <li className="nav-item" style={{ marginLeft: '20px' }}>
+                                    <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/vaibhav">Sign In</Link></button>
+                                </li>
+                              
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </>
+    );
 }
 
 export default Navbar;
