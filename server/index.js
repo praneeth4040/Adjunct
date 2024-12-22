@@ -1,8 +1,10 @@
 const express = require('express');
 require('dotenv').config();
-const generator = require('./geminiAi/geminiApi')
+const generator = require('./components/geminiApi')
 const mongoose = require('mongoose');
-
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const signup = require('./components/signUp');
 
 const app = express();
 const PORT = process.env.PORT ||3000;
@@ -12,6 +14,9 @@ mongoose.connect(connection).then(console.log("mongodb connected successfully"))
     console.log(err);
 });
 app.use(express.json());
+app.use(cors());
+
+app.use('/signup',signup);
 
 app.post('/askAi',async(req,res)=>{
      const { userPrompt ,mailId } = req.body;
