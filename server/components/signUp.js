@@ -19,25 +19,25 @@ const transporter = nodemailer.createTransport({
 // Signup Route
 router.post("/", async (req, res) => {
   try {
-    const { name, email, password, retypepassword } = req.body;
+    const { Name, Email, Password, RetypePassword } = req.body;
 
     // Input Validation
-    if (!name || !email || !password || !retypepassword) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!Name || !Email || !Password || !RetypePassword) {
+      return res.status(400).json({ message: "All fields are required" , value : 0});
     }
 
-    if (password !== retypepassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
+    if (Password !== RetypePassword) {
+      return res.status(400).json({ message: "Passwords do not match" , value : 1 });
     }
 
     // Check if email already exists
-    const existingUser = await UserInfo.findOne({ email });
+    const existingUser = await UserInfo.findOne({ Email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({ message: "Email already exists" , value:2 });
     }
 
     // Hash Password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(Password, 10);
 
     // Generate OTP
     const otp = otpGenerator.generate(6, {
@@ -47,9 +47,9 @@ router.post("/", async (req, res) => {
 
     // Save User to DB
     const newUser = new UserInfo({
-      name,
-      email,
-      password: hashedPassword,
+      Name,
+      Email,
+      Password: hashedPassword,
       otp,
       otpExpiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
       isVerified: false,
@@ -59,17 +59,17 @@ router.post("/", async (req, res) => {
     // Send OTP Email
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: email,
+      to: Email,
       subject: "Verify Your Account",
       text: `Your OTP for account verification is: ${otp}. It is valid for 10 minutes.`,
     };
 
     await transporter.sendMail(mailOptions);
 
-    res.status(201).json({ message: "Signup successful! Verify your email to activate your account." });
+    res.status(201).json({ message: "Signup successful! Verify your email to activate your account.", value:3 });
   } catch (error) {
     console.error("Error in /signup:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" , value:4});
   }
 });
 
