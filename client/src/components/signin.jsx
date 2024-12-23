@@ -5,13 +5,13 @@ function Signin() {
   const [Name,setName]=useState("")
   const [Password,setPassword]=useState("")
   const [Email,setEmail]=useState("")
-  const [RepeatPassword,setRepeatPassword]=useState("")
+  const [RetypePassword,setRetypePassword]=useState("")
   
 
   const handleSubmit = async(e) => {
     e.preventDefault();
      try {
-      const response=await axios.post("http://localhost:3000/signup",{Name,email,password,repeatpassword})
+      const response=await axios.post("http://localhost:3000/signup",{Name,Email,Password,RetypePassword})
       if (response.data.value==0){
         console.log("all fields are required")
       }
@@ -88,8 +88,8 @@ function Signin() {
               type="password"
               className="form-control"
               id="repeatPassword"
-              value={RepeatPassword}
-              onChange={(e) => setRepeatPassword(e.target.value)}
+              value={RetypePassword}
+              onChange={(e) => setRetypePassword(e.target.value)}
               
                             required
             />
