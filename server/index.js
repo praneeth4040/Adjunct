@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const signup = require('./components/signUp');
+const Login = require('./components/login');
 const verifyToken = require('./middleware/verifyToken')
 
 const app = express();
@@ -15,9 +16,14 @@ mongoose.connect(connection).then(()=>console.log("mongodb connected successfull
     console.log(err);
 });
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST' ,'PUT','DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization']  // Allow specific headers
+}));
 
 app.use('/signup',signup);
+app.use('/login',Login);
 
 app.post('/askAi',verifyToken,async(req,res)=>{
      const { userPrompt ,mailId } = req.body;
