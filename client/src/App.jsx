@@ -8,6 +8,8 @@ import Profile from './components/profile';
 import Signin from './components/signin';
 
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
+import Forgetpassword from './components/forgetpassword';
+import OTPVerificationPage from './components/otp';
 
 function App() {
  const router=createBrowserRouter([{
@@ -24,6 +26,16 @@ function App() {
  {
   path:"/vaibhav",
   element:<><Navbar/><Signin/></>
+
+ }
+ ,{
+  path:"/forgetpassword",
+  element:<><Forgetpassword/></>
+ }
+ ,
+ {
+  path:"/otp",
+  element:<><OTPVerificationPage/></>
  }
 ])
  
