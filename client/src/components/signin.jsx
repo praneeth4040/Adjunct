@@ -2,16 +2,16 @@ import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 function Signin() {
-  const [Name,setName]=useState("")
-  const [Password,setPassword]=useState("")
-  const [Email,setEmail]=useState("")
+  const [name,setName]=useState("")
+  const [password,setPassword]=useState("")
+  const [email,setEmail]=useState("")
   const [RetypePassword,setRetypePassword]=useState("")
   
 
   const handleSubmit = async(e) => {
     e.preventDefault();
      try {
-      const response=await axios.post("http://localhost:3000/signup",{Name,Email,Password,RetypePassword})
+      const response=await axios.post("http://localhost:3000/signup",{name,email,password,RetypePassword})
       if (response.data.value==0){
         console.log("all fields are required")
       }
@@ -48,7 +48,7 @@ function Signin() {
               type="text"
               className="form-control"
               id="Name"
-              value={Name}
+              value={name}
               onChange={(e) => setName(e.target.value)}
               required
               
@@ -62,7 +62,7 @@ function Signin() {
               type="email"
               className="form-control"
               id="email"
-              value={Email}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               
@@ -75,7 +75,7 @@ function Signin() {
               type="password"
               className="form-control"
               id="password"
-              value={Password}
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               
               
