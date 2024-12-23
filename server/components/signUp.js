@@ -18,26 +18,30 @@ const transporter = nodemailer.createTransport({
 
 // Signup Route
 router.post("/", async (req, res) => {
+  console.log(req.body);
   try {
-    const { Name, Email, Password, RetypePassword } = req.body;
-
+    const { name, email, password, RetypePassword } = req.body;
     // Input Validation
-    if (!Name || !Email || !Password || !RetypePassword) {
+    if (!name || !email || !password || !RetypePassword) {
       return res.status(400).json({ message: "All fields are required" , value : 0});
     }
+    if (!email || email.trim() === "") {
+      return res.status(400).json({ message: "Email is required" });
+    }    
 
-    if (Password !== RetypePassword) {
+    if (password !== RetypePassword) {
       return res.status(400).json({ message: "Passwords do not match" , value : 1 });
     }
 
     // Check if email already exists
-    const existingUser = await UserInfo.findOne({ Email });
+    console.log("before checking",email);
+    const existingUser = await UserInfo.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" , value:2 });
     }
 
     // Hash Password
-    const hashedPassword = await bcrypt.hash(Password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate OTP
     const otp = otpGenerator.generate(6, {
@@ -46,20 +50,23 @@ router.post("/", async (req, res) => {
     });
 
     // Save User to DB
+    console.log("before entering into database",email);
     const newUser = new UserInfo({
-      Name,
-      Email,
-      Password: hashedPassword,
+      name,
+      email,
+      password: hashedPassword,
       otp,
       otpExpiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
       isVerified: false,
     });
-    await newUser.save();
+    console.log("user to be saved",newUser);
+    await newUser.save(); 
 
     // Send OTP Email
+    console.log("before sending mail to user",email);
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: Email,
+      to: email,
       subject: "Verify Your Account",
       text: `Your OTP for account verification is: ${otp}. It is valid for 10 minutes.`,
     };
@@ -84,7 +91,7 @@ router.post("/verify-otp", async (req, res) => {
     }
 
     // Find User
-    const user = await UserInfo.findOne({ email });
+    const user = await UserInfo.findOne({ Email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
