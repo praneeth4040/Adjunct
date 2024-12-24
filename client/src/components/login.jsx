@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import {Link} from 'react-router-dom';
 function LoginPage() {
 const [email , setEmail] = useState("");
 const [password , setPassword] = useState("");
@@ -29,7 +30,7 @@ const [password , setPassword] = useState("");
       console.log("error :",error);
     }
   }
-    return (<>
+    return (
    
     <main>
     
@@ -40,7 +41,7 @@ const [password , setPassword] = useState("");
 
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
-              Username
+              Email
             </label>
             <input
               type="text"
@@ -84,6 +85,7 @@ const [password , setPassword] = useState("");
         </form>
       </div>
     </div>
+    </main>
   );
 };
 
