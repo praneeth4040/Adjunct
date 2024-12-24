@@ -28,9 +28,7 @@ const [password , setPassword] = useState("");
     } catch (error) {
       console.log("error :",error);
     }
-
   }
-    
     return (<>
    
     <main>
@@ -39,38 +37,54 @@ const [password , setPassword] = useState("");
       <div className="card p-4 shadow" style={{ width: '25rem' }}>
         <h1 className="text-center mb-4">Login</h1>
         <form onSubmit={handleSubmit}>
+
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email</label>
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="email"
               value={email}
               onChange={(e)=> setEmail(e.target.value)}
-              
               required
             />
           </div>
+
+          {/* Password Field */}
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
             <input
               type="password"
               className="form-control"
               id="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e)=> setPassword(e.target.value)}
-              
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">Login</button>
+
+          {/* Forgot Password Link */}
+          <div className="mb-3 text-end">
+            <Link to="/forgetpassword" className="text-decoration-none">
+              Forgot Password?
+            </Link>
+          </div>
+
+          {/* Submit Button */}
+          <div className="d-grid">
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </div>
         </form>
       </div>
     </div>
-
-</main>
-
-    </>  );
-}
+  );
+};
 
 export default LoginPage;
