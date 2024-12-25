@@ -1,37 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
 
 function Home() {
   const location = useLocation();
-  const name = location.state?.userName
-    const backgroundImageStyle = {
-        backgroundImage: 'https://images.pexels.com/photos/17485706/pexels-photo-17485706/free-photo-of-an-artist-s-illustration-of-artificial-intelligence-ai-this-image-visualises-the-input-and-output-of-neural-networks-and-how-ai-systems-perceive-data-it-was-created-by-rose-pilkington.png',
-        backgroundSize: 'cover', // Optional, to cover the entire container
-        backgroundPosition: 'center', // Optional, to center the image
-        height: '100vh', // Set the height as needed
-      };
-    
-    return ( <>
+  const name = location.state?.userName;
 
-    <h1>Home <strong>{name}</strong></h1>
-   <div style={backgroundImageStyle}>
-   </div>
+ 
+ 
 
+  
 
-        
-    <footer class="bg-light py-3 text-center">
-    <input
+  useEffect(() => {
+    // Generate a random message on page load
+   
+
+    // Disable scrolling when the component is mounted
+    document.body.style.overflow = 'hidden';
+
+    // Re-enable scrolling when the component is unmounted (cleanup)
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  return (
+    <div className="d-flex flex-column justify-content-between" style={{ height: '100vh' }}>
+      {/* Main content in the middle of the page */}
+      <div className="container d-flex justify-content-center align-items-center flex-grow-1 text-center"  style={{
+        position: 'absolute',
+        top: '30%', // Set input at 60% of the page height
+        right: "100px"
+        }}>
+        <div>
+          <h1>Welcome, <strong>{name}</strong>!</h1>
+          <p className="lead mt-4">
+            This is your personal homepage where you can interact with our bot.
+            Get started by typing below and feel free to ask anything!
+          </p>
+        </div>
+      </div>
+
+      {/* Footer with placeholder and send icon */}
+      <footer className="bg-light py-3 text-center"
+       style={{
+        position: 'relative',
+        top: '60%', // Set input at 60% of the page height
+        }}>
+        <div className="input-group" >
+        <input
   className="form-control"
   type="text"
   defaultValue="ask me."
   aria-label="readonly input example"
   readOnly=""
+  
+
 />
+          <button
+            className="btn btn-primary"
+            id="sendButton"
+            style={{
+              borderRadius: '0 5px 5px 0',
+              backgroundColor: 'green', // Set icon color to green
+              border: 'none',
+            }}
+            
+          >
+            <i className="bi bi-send" style={{ color: 'white' }}></i> {/* Bootstrap icon */}
 
-    </footer>
-
-
-    </> );
+          </button>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
 export default Home;
