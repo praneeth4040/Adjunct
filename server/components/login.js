@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found",value:1 });
     }
-
+    const name = user.name;
     // Check if user is verified
     if (!user.isVerified) {
       return res.status(400).json({ message: "Please verify your email first", value:2 });
@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       { expiresIn: "9h" }
     );
 
-    res.status(200).json({ message: "Login successful", token , value:5});
+    res.status(200).json({ message: "Login successful", token , value:5 , name});
   } catch (error) {
     console.error("Error in /login:", error);
     res.status(500).json({ message: "Internal server error" , value:4});
