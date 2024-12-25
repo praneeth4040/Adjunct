@@ -14,7 +14,7 @@ const OTPVerification = () => {
         setOtp(''); // Clear the input value
         const resendResponse = await axios.post("http://localhost:3000/signup/resend-otp",{email});
         const val = resendResponse.data.value;
-        if(val){
+        if(val==4){
             setMessage(`A new OTP has been sent to ${email}`);
         }
         switch (val) {
@@ -77,6 +77,7 @@ const OTPVerification = () => {
             <div className="card shadow p-4" style={{ width: '350px' }}>
                 <h1 className="text-center mb-3">OTP Verification</h1>
                 <p className="text-center text-muted">OTP sent to <strong>{email}</strong></p>
+                <h6>( check the inbox and spam folder)</h6>
                 <input
                     type="text"
                     className="form-control mb-3"
