@@ -91,7 +91,7 @@ router.post("/verify-otp", async (req, res) => {
     }
 
     // Find User
-    const user = await UserInfo.findOne({ Email });
+    const user = await UserInfo.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
