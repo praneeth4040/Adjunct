@@ -87,20 +87,20 @@ router.post("/verify-otp", async (req, res) => {
 
     // Validate Inputs
     if (!email || !otp) {
-      return res.status(400).json({ message: "Email and OTP are required" });
+      return res.status(400).json({ message: "Email and OTP are required",value:1 });
     }
 
     // Find User
     const user = await UserInfo.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found",value:2});
     }
 
     // Check OTP
     if (user.otp !== otp || user.otpExpiresAt < Date.now()) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
+      return res.status(400).json({ message: "Invalid or expired OTP",value:3 });
     }
-
+const name = user.name;
     // Update User Status
     user.isVerified = true;
     user.otp = null;
@@ -113,10 +113,10 @@ router.post("/verify-otp", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "9h" }
     );
-    res.status(200).json({ message: "Account verified successfully", token });
+    res.status(200).json({ message: "Account verified successfully", token ,value:4 , name});
   } catch (error) {
     console.error("Error in /verify-otp:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error",value:5 });
   }
 });
 
@@ -127,19 +127,18 @@ router.post("/resend-otp", async (req, res) => {
 
     // Validate Email
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return res.status(400).json({ message: "Email is required",value:1 });
     }
 
     // Find User
     const user = await UserInfo.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found",value:2 });
     }
 
     if (user.isVerified) {
-      return res.status(400).json({ message: "User is already verified" });
+      return res.status(400).json({ message: "User is already verified" ,value:3});
     }
-
     // Generate New OTP
     const newOtp = otpGenerator.generate(6, {
       upperCaseAlphabets: false,
@@ -160,10 +159,10 @@ router.post("/resend-otp", async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: "New OTP sent to your email" });
+    res.status(200).json({ message: "New OTP sent to your email" ,value:4});
   } catch (error) {
     console.error("Error in /resend-otp:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error" ,value:5});
   }
 });
 

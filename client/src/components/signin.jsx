@@ -26,7 +26,7 @@ function Signin() {
       }
       else if(response.data.value==3){
         console.log("sign up successful")
-        navigate("/otp")
+        navigate("/otp",{state:{email}})
       }
       else if(response.data.value==4){
         console.log("internal server error")
