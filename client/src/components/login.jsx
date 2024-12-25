@@ -2,7 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
 import {Link} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 function LoginPage() {
+  const navigate = useNavigate();
 const [email , setEmail] = useState("");
 const [password , setPassword] = useState("");
   const handleSubmit= async(e)=>{
@@ -10,6 +12,7 @@ const [password , setPassword] = useState("");
     try {
       const response = await axios.post("http://localhost:3000/login",{email,password})
       const val = response.data.value;
+      const userName = response.data.name;
       switch(val){
         case 0: console.log("Email and Password are required")
                 break;
@@ -21,7 +24,8 @@ const [password , setPassword] = useState("");
                 break;
         case 4: console.log("Internal server error")
                 break;
-        case 5: console.log("login successful", response.data.token)
+        case 5: console.log("login successful", response.data.token, userName)
+        navigate("/",{state:{userName}});
                 break;
         default : console.log("undefined error")
                 break;
