@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 function Signin() {
   const [name,setName]=useState("")
   const [password,setPassword]=useState("")
   const [email,setEmail]=useState("")
-  const [RetypePassword,setRetypePassword]=useState("")
+  const [RetypePassword,setRetypePassword]=useState("");
+  const navigate = useNavigate();
   
 
   const handleSubmit = async(e) => {
@@ -24,6 +26,7 @@ function Signin() {
       }
       else if(response.data.value==3){
         console.log("sign up successful")
+        navigate("/otp")
       }
       else if(response.data.value==4){
         console.log("internal server error")
