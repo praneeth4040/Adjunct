@@ -6,14 +6,15 @@ import Home from './components/home';
 import LoginPage from './components/login';
 import Profile from './components/profile';
 import Signin from './components/signin';
-
+import OpenPage from './components/openingpage';
 import { createBrowserRouter,RouterProvider } from 'react-router-dom';
 import Forgetpassword from './components/forgetpassword';
 import OTPVerificationPage from './components/otp';
 
+
 function App() {
  const router=createBrowserRouter([{
-  path:'/',
+  path:'/home',
   element:<><Navbar/><Home/></>
  },{
   path:"/login",
@@ -24,7 +25,7 @@ function App() {
   element:<><Navbar/><Profile/></>
  },
  {
-  path:"/vaibhav",
+  path:"/signin",
   element:<><Navbar/><Signin/></>
 
  }
@@ -36,6 +37,10 @@ function App() {
  {
   path:"/otp",
   element:<><OTPVerificationPage/></>
+ },
+ {
+  path:"/",
+  element:<><OpenPage/></>
  }
 ])
  
@@ -45,7 +50,7 @@ function App() {
     
     <RouterProvider router={router}/>
     <main>
-
+   
     </main>
     
 </>
