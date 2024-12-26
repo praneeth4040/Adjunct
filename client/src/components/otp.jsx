@@ -58,7 +58,7 @@ const OTPVerification = () => {
             break;
         case 4:
             console.log("account verified succesfully", response.data.token,userName);
-            navigate("/",{state:{userName}})
+            navigate("/home",{state:{userName}})
             break;
         case 5:
             console.log("internal server error")

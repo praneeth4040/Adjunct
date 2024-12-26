@@ -20,7 +20,7 @@ function Navbar() {
                                     <button style={{ borderRadius: '10px' }}><Link className="nav-link active" to="/login">Login</Link></button>
                                 </li>
                                 <li className="nav-item" style={{ marginLeft: '20px' }}>
-                                    <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/vaibhav">Sign In</Link></button>
+                                    <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/signin">Sign In</Link></button>
                                 </li>
                               
                             </ul>
