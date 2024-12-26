@@ -22,6 +22,9 @@ function Navbar() {
                                 <li className="nav-item" style={{ marginLeft: '20px' }}>
                                     <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/signin">Sign In</Link></button>
                                 </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/profile">profile</Link>
+                                </li>
                               
                             </ul>
                         </div>
