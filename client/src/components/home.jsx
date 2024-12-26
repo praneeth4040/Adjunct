@@ -99,7 +99,7 @@ function Home() {
                 borderRadius: '5px',
               }}
             >
-              <i className="bi bi-send" style={{ color: 'white' }}>send</i>
+              <i className="bi bi-send" style={{ color: 'white' }}> generate</i>
             </button>
           </div>
         </div>
