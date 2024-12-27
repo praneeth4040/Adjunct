@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const signup = require('./components/signUp');
 const Login = require('./components/login');
 const verifyToken = require('./middleware/verifyToken')
+const sendMail = require("./components/sendMail");
+
 
 const app = express();
 const PORT = process.env.PORT ||3000;
@@ -24,6 +26,7 @@ app.use(cors({
 
 app.use('/signup',signup);
 app.use('/login',Login);
+app.use('/sendMail',sendMail);
 
 app.post('/askAi',verifyToken,async(req,res)=>{
      const { userPrompt ,mailId } = req.body;

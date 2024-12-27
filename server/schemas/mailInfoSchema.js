@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const MailInfoSchema = mongoose.Schema({
-      emailID: {
+      senderEmailID: {
         type: String,
         required: true,
         unique: true,
