@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const UserInfo = require("./userInfoSchema");
 
 const MailInfoSchema = mongoose.Schema({
+      senderName: {
+       type: String,
+       required: true,
+       trim: true
+      },
       senderEmailId: {
         type: String,
         required: true,
