@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 function Navbar() {
     // State to track user login status
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
 
     // Simulate checking user authentication status (replace with real logic)
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Example: Check token in localStorage
+        const token = localStorage.getItem('authToken'); // Example: Check token in localStorage
         setIsLoggedIn(!!token); // Set true if token exists
     }, []);
 
@@ -22,11 +23,12 @@ function Navbar() {
                         </button>
                         <div className="collapse navbar-collapse" id="navbarNav">
                             <ul className="navbar-nav ms-auto">
-                                <li className="nav-item">
-                                    <Link className="nav-link active" aria-current="page" to="/home">Home</Link>
-                                </li>
+                                
                                 {!isLoggedIn ? (
                                     <>
+                                     <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/">Home</Link>
+                                </li>
                                         <li className="nav-item" style={{ marginLeft: '20px' }}>
                                             <button style={{ borderRadius: '10px' }}>
                                                 <Link className="nav-link active" to="/login">Login</Link>
@@ -39,9 +41,14 @@ function Navbar() {
                                         </li>
                                     </>
                                 ) : (
+                                    <>
+                                    <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/home">Home</Link>
+                                </li>
                                     <li className="nav-item" style={{ marginLeft: '20px' }}>
                                         <Link className="nav-link active" to="/profile">Profile</Link>
                                     </li>
+                                    </>
                                 )}
                             </ul>
                         </div>
