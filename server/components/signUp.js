@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
     console.log("before checking",email);
     const existingUser = await UserInfo.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" , value:2 });
+      return res.status(400).json({ message: "Email already exist" , value:2 });
     }
 
     // Hash Password
@@ -111,7 +111,7 @@ const name = user.name;
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "9h" }
+      { expiresIn: "8h" }
     );
     res.status(200).json({ message: "Account verified successfully", token ,value:4 , name});
   } catch (error) {

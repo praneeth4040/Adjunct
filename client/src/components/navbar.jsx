@@ -14,13 +14,16 @@ function Navbar() {
                         <div className="collapse navbar-collapse" id="navbarNav">
                             <ul className="navbar-nav ms-auto">
                                 <li className="nav-item">
-                                    <Link className="nav-link active" aria-current="page" to="/">home</Link>
+                                    <Link className="nav-link active" aria-current="page" to="/home">home</Link>
                                 </li>
                                 <li className="nav-item" style={{ marginLeft: '20px' }}>
                                     <button style={{ borderRadius: '10px' }}><Link className="nav-link active" to="/login">Login</Link></button>
                                 </li>
                                 <li className="nav-item" style={{ marginLeft: '20px' }}>
-                                    <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/vaibhav">Sign In</Link></button>
+                                    <button style={{ borderRadius: '10px' }} ><Link className="nav-link active" to="/signin">Sign In</Link></button>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link active" aria-current="page" to="/profile">profile</Link>
                                 </li>
                               
                             </ul>
