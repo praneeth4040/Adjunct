@@ -34,7 +34,15 @@ function LoginPage() {
           break;
         case 5:
           console.log("Login successful", response.data.token, userName);
-          navigate("/home", { state: { userName } });
+
+          // Save token to localStorage and redirect to home page
+          if (response.data.token) {
+            
+
+            navigate('/home', { state: { userName } }); // Redirect to home page
+          } else {
+            alert('Login failed');
+          }
           break;
         default:
           console.log("Undefined error");
