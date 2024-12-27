@@ -11,7 +11,7 @@ function Profile() {
   };
   const handleLogout = () => {
     // Clear any authentication tokens or user data
-    localStorage.removeItem("token"); // Or any other logout logic
+    localStorage.removeItem("authToken"); // Or any other logout logic
     navigate("/login");
   };
 
