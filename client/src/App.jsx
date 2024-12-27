@@ -9,6 +9,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Forgetpassword from './components/forgetpassword';
 import OTPVerificationPage from './components/otp';
 import PrivateRoute from './components/privateroute';
+import Setup from './components/setup';
 
 function App() {
   const router = createBrowserRouter([
@@ -64,6 +65,15 @@ function App() {
       path: '/',
       element: <OpenPage />,
     },
+    {
+      path: '/Setup',
+      element: (
+        <PrivateRoute>
+          <Navbar />
+          <Setup />
+        </PrivateRoute>
+      )
+    }
   ]);
 
   return (
