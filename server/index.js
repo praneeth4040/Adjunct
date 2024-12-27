@@ -8,6 +8,7 @@ const signup = require('./components/signUp');
 const Login = require('./components/login');
 const verifyToken = require('./middleware/verifyToken')
 const sendMail = require("./components/sendMail");
+const setUp = require("./components/setUp");
 
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cors({
 app.use('/signup',signup);
 app.use('/login',Login);
 app.use('/sendMail',sendMail);
+app.use('/setup',setUp);
 
 app.post('/askAi',verifyToken,async(req,res)=>{
      const { userPrompt ,mailId } = req.body;
