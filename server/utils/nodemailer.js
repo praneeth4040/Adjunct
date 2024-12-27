@@ -15,6 +15,11 @@ async function transporterFunction(senderEmailId , appPassword , reciverEmailId 
         subject: mailSubject,
         text: fullPrompt,
       };
-    return {mailOptions , transporter}; 
+      try{
+      await transporter.sendMail(mailOptions);
+      return true
+      }catch(err){
+        console.log(err);
+      }
 }
 module.exports = transporterFunction;

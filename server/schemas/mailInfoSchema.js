@@ -1,7 +1,8 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const UserInfo = require("./userInfoSchema");
 
 const MailInfoSchema = mongoose.Schema({
-      emailID: {
+      senderEmailId: {
         type: String,
         required: true,
         unique: true,
@@ -11,6 +12,11 @@ const MailInfoSchema = mongoose.Schema({
       appPassword: {
         type: String,
         required: true,
+      },
+      userDetails:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: UserInfo,
+        required : true
       },
     });
 
