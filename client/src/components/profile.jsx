@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { showToast } from './totify';
+
 
 function Profile() {
   const navigate = useNavigate();
@@ -11,7 +13,8 @@ function Profile() {
   };
   const handleLogout = () => {
     // Clear any authentication tokens or user data
-    localStorage.removeItem("authToken"); // Or any other logout logic
+    localStorage.removeItem("authToken"); 
+    showToast("warn","logged out")// Or any other logout logic
     navigate("/login");
   };
 

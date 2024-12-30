@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { showToast } from './totify';
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -15,42 +15,53 @@ function LoginPage() {
       const response = await axios.post("http://localhost:3000/login", { email, password });
       const val = response.data.value;
       const userName = response.data.name;
-      
-      switch(val) {
+
+      switch (val) {
         case 0:
           console.log("Email and Password are required");
+          showToast("error", "Email and Password are required");
           break;
         case 1:
           console.log("User not found");
+          showToast("error", "User not found");
           break;
         case 2:
           console.log("Please verify your email first");
+          showToast("info", "Please verify your email first");
+          navigate('/home', { state: { email } }); 
           break;
         case 3:
           console.log("Invalid password");
+          showToast("error", "Invalid password");
           break;
         case 4:
           console.log("Internal server error");
+          showToast("error", "Internal server error");
           break;
         case 5:
           console.log("Login successful", response.data.token, userName);
-
+          showToast("success", `Welcome, ${userName}! Login successful.`);
+          
           // Save token to localStorage and redirect to home page
           if (response.data.token) {
             localStorage.setItem('authToken', response.data.token); // Save token
-            navigate('/home', { state: { userName } }); // Redirect to home page
+            setTimeout(() => {
+              navigate('/home', { state: { userName } }); // Redirect after a short delay
+            }, 500); // Ensure toast appears before navigating
           } else {
-            alert('Login failed');
+            showToast("error", "Login failed. Token missing.");
           }
           break;
         default:
           console.log("Undefined error");
+          showToast("error", "An undefined error occurred");
           break;
       }
     } catch (error) {
       console.error("Error:", error);
+      showToast("error", "An error occurred during login.");
     }
-  }
+  };
 
   return (
     <main>

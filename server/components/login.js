@@ -13,24 +13,24 @@ router.post("/", async (req, res) => {
 
     // Validate Inputs
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and Password are required" , value :0});
+      return res.status(200).json({ message: "Email and Password are required" , value :0});
     }
 
     // Find User
     const user = await UserInfo.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found",value:1 });
+      return res.status(200).json({ message: "User not found",value:1 });
     }
     const name = user.name;
     // Check if user is verified
     if (!user.isVerified) {
-      return res.status(400).json({ message: "Please verify your email first", value:2 });
+      return res.status(200).json({ message: "Please verify your email first", value:2 });
     }
 
     // Check Password
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      return res.status(400).json({ message: "Invalid password" , value:3});
+      return res.status(200).json({ message: "Invalid password" , value:3});
     }
 
     // Generate JWT Token
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
     res.status(200).json({ message: "Login successful", token , value:5 , name});
   } catch (error) {
     console.error("Error in /login:", error);
-    res.status(500).json({ message: "Internal server error" , value:4});
+    res.status(200).json({ message: "Internal server error" , value:4});
   }
 });
 

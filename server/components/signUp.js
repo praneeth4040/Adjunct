@@ -23,21 +23,21 @@ router.post("/", async (req, res) => {
     const { name, email, password, RetypePassword } = req.body;
     // Input Validation
     if (!name || !email || !password || !RetypePassword) {
-      return res.status(400).json({ message: "All fields are required" , value : 0});
+      return res.status(200).json({ message: "All fields are required" , value : 0});
     }
     if (!email || email.trim() === "") {
-      return res.status(400).json({ message: "Email is required" });
+      return res.status(200).json({ message: "Email is required" });
     }    
 
     if (password !== RetypePassword) {
-      return res.status(400).json({ message: "Passwords do not match" , value : 1 });
+      return res.status(200).json({ message: "Passwords do not match" , value : 1 });
     }
 
     // Check if email already exists
     console.log("before checking",email);
     const existingUser = await UserInfo.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exist" , value:2 });
+      return res.status(200).json({ message: "Email already exist" , value:2 });
     }
 
     // Hash Password
@@ -76,7 +76,7 @@ router.post("/", async (req, res) => {
     res.status(201).json({ message: "Signup successful! Verify your email to activate your account.", value:3 });
   } catch (error) {
     console.error("Error in /signup:", error);
-    res.status(500).json({ message: "Internal server error" , value:4});
+    res.status(200).json({ message: "Internal server error" , value:4});
   }
 });
 
@@ -87,18 +87,18 @@ router.post("/verify-otp", async (req, res) => {
 
     // Validate Inputs
     if (!email || !otp) {
-      return res.status(400).json({ message: "Email and OTP are required",value:1 });
+      return res.status(200).json({ message: "Email and OTP are required",value:1 });
     }
 
     // Find User
     const user = await UserInfo.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found",value:2});
+      return res.status(200).json({ message: "User not found",value:2});
     }
 
     // Check OTP
     if (user.otp !== otp || user.otpExpiresAt < Date.now()) {
-      return res.status(400).json({ message: "Invalid or expired OTP",value:3 });
+      return res.status(200).json({ message: "Invalid or expired OTP",value:3 });
     }
 const name = user.name;
     // Update User Status
@@ -116,7 +116,7 @@ const name = user.name;
     res.status(200).json({ message: "Account verified successfully", token ,value:4 , name});
   } catch (error) {
     console.error("Error in /verify-otp:", error);
-    res.status(500).json({ message: "Internal server error",value:5 });
+    res.status(200).json({ message: "Internal server error",value:5 });
   }
 });
 
@@ -127,17 +127,17 @@ router.post("/resend-otp", async (req, res) => {
 
     // Validate Email
     if (!email) {
-      return res.status(400).json({ message: "Email is required",value:1 });
+      return res.status(200).json({ message: "Email is required",value:1 });
     }
 
     // Find User
     const user = await UserInfo.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found",value:2 });
+      return res.status(200).json({ message: "User not found",value:2 });
     }
 
     if (user.isVerified) {
-      return res.status(400).json({ message: "User is already verified" ,value:3});
+      return res.status(200).json({ message: "User is already verified" ,value:3});
     }
     // Generate New OTP
     const newOtp = otpGenerator.generate(6, {
@@ -162,7 +162,7 @@ router.post("/resend-otp", async (req, res) => {
     res.status(200).json({ message: "New OTP sent to your email" ,value:4});
   } catch (error) {
     console.error("Error in /resend-otp:", error);
-    res.status(500).json({ message: "Internal server error" ,value:5});
+    res.status(200).json({ message: "Internal server error" ,value:5});
   }
 });
 

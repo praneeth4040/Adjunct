@@ -10,6 +10,8 @@ import Forgetpassword from './components/forgetpassword';
 import OTPVerificationPage from './components/otp';
 import PrivateRoute from './components/privateroute';
 import Setup from './components/setup';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const router = createBrowserRouter([
@@ -56,9 +58,9 @@ function App() {
     {
       path: '/otp',
       element: (
-        <PrivateRoute>
+        
           <OTPVerificationPage />
-        </PrivateRoute>
+        
       ),
     },
     {
@@ -79,7 +81,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <main></main>
+      <ToastContainer/>
     </>
   );
 }
