@@ -4,13 +4,14 @@ const MailInfo = require('../schemas/mailInfoSchema');
 const UserInfo = require("../schemas/userInfoSchema")
 
 router.post("/",async(req,res)=>{
-    const {senderEmailId , appPassword ,email} = req.body;
+    const {senderName,senderEmailId , appPassword ,email} = req.body;
     try {
         const user = await UserInfo.findOne({email:email});
         if(!user){
             return res.status(200).json({message:"no user found"});
         }
         const newMailInfo = new MailInfo({
+            senderName,
             senderEmailId ,
             appPassword,
             userDetails:user._id,
