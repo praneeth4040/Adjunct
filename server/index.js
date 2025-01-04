@@ -9,7 +9,7 @@ const Login = require('./components/login');
 const verifyToken = require('./middleware/verifyToken')
 const sendMail = require("./components/sendMail");
 const setUp = require("./components/setUp");
-
+const getData = require('./components/getData');
 
 const app = express();
 const PORT = process.env.PORT ||3000;
@@ -29,6 +29,7 @@ app.use('/signup',signup);
 app.use('/login',Login);
 app.use('/sendMail',sendMail);
 app.use('/setup',setUp);
+app.use('/getData',getData);
 
 app.post('/askAi',verifyToken,async(req,res)=>{
      const { userPrompt ,mailId } = req.body;
