@@ -40,6 +40,9 @@ const OTPVerification = () => {
 
     };
 
+
+//this is for verifying and above one is for resending
+
     const handleVerify = async(e) => {
         e.preventDefault();
      try {
@@ -58,6 +61,7 @@ const OTPVerification = () => {
             break;
         case 4:
             console.log("account verified succesfully", response.data.token,userName);
+            localStorage.setItem('authToken', response.data.token)
             navigate("/home",{state:{userName}})
             break;
         case 5:
