@@ -1,100 +1,122 @@
-import React from 'react';
-import { useState,useEffect } from "react";
-
-function Forgetpassword() {
+import React, { useState } from "react";
+import axios from "axios";
+const ForgotPassword = () => {
+  // State to track the current step
+  const [step, setStep] = useState("email"); // Possible values: 'email', 'otp', 'reset'
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  
+  // Handlers
+  const handleEmailSubmit = async() => {
+    if (email) {
+      // Simulate email verification
+      try{
+        const response=await axios.post("http://localhost:3000/login/forgot-password",{email})
+        const val=response.data.value
+        switch (val) {
+                case 0:
+                  console.log(response.data.message);
+                  
+                  break;
+                case 1:
+                  console.log(response.data.message);
+                  
+                  break;
+                case 2:
+                  console.log(response.data.message);
+                  setStep("otp");
+                  break;
+                case 3:
+                  console.log(response.data.message);
+                  break;
+               default:
+                console.log("internal error")
+                break;
+        }
+      }catch(err){
+        console.log("error",err)
+      }
 
-  useEffect(() => {
-    // Set the background color of the entire page
-    document.body.style.backgroundColor = '#C89F77'; // Lion Yellow
-    return () => {
-      // Reset the background color when the component is unmounted
-      document.body.style.backgroundColor = '';
-    };
-  }, []);
+      }
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
+  const handleOtpVerification = () => {
+    
+    if (otp === "1234") { // Mock OTP verification
+      console.log("OTP verified");
+      setStep("reset"); // Proceed to reset password step
+    } else {
+      alert("Invalid OTP");
     }
-    setError("");
-    console.log("Password reset request submitted for:", email);
-    // Add your reset password logic here
+  };
+
+  const handlePasswordReset = () => {
+    if (newPassword === confirmPassword && newPassword) {
+      console.log("Password successfully reset");
+      alert("Password reset successful! You can now log in with your new password.");
+      // Redirect to login page or handle post-reset logic
+    } else {
+      alert("Passwords do not match!");
+    }
   };
 
   return (
-    <>
-      <div className="container d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: '#C89F77' }}>
-        <div className="card p-4 shadow" style={{ width: "24rem" }}>
-          <h2 className="text-center mb-4">Forget Password</h2>
-          <form onSubmit={handleSubmit}>
-            {/* Email Field */}
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label" style={{ fontWeight: 'bold' }}>
-                Email Address
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
+    <div style={{ maxWidth: "400px", margin: "0 auto", textAlign: "center" }}>
+      <h2>Forgot Password</h2>
 
-            {/* Password Field */}
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label"style={{ fontWeight: 'bold' }}>
-                New Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                placeholder="Enter new password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            {/* Repeat Password Field */}
-            <div className="mb-3">
-              <label htmlFor="confirmPassword" className="form-label"style={{ fontWeight: 'bold' }}>
-                Repeat Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="confirmPassword"
-                placeholder="Retype new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            {/* Error Message */}
-            {error && <div className="alert alert-danger">{error}</div>}
-
-            {/* Submit Button */}
-            <div className="d-grid">
-              <button type="submit" className="btn" style={{ backgroundColor: '#6F4F37', color: 'white' }}>
-                Submit
-              </button>
-            </div>
-          </form>
+      {/* Render based on the current step */}
+      {step === "email" ? (
+        <div>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ width: "100%", marginBottom: "10px" }}
+          />
+          <button onClick={handleEmailSubmit} style={{ width: "100%" }}>
+            Send OTP
+          </button>
         </div>
-      </div>
-    </>
+      ) : step === "otp" ? (
+        <div>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            style={{ width: "100%", marginBottom: "10px" }}
+          />
+          <button onClick={handleOtpVerification} style={{ width: "100%" }}>
+            Verify OTP
+          </button>
+        </div>
+      ) : (
+        <div>
+          <input
+            type="password"
+            placeholder="Set New Password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            style={{ width: "100%", marginBottom: "10px" }}
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            style={{ width: "100%", marginBottom: "10px" }}
+          />
+          <button onClick={handlePasswordReset} style={{ width: "100%" }}>
+            Reset Password
+          </button>
+        </div>
+      )}
+    </div>
   );
-}
+};
 
-export default Forgetpassword;
+export default ForgotPassword;
