@@ -95,45 +95,53 @@ router.post("/forgot-password", async (req, res) => {
     res.status(500).json({ message: "Internal server error", value: 3 });
   }
 });
-
-// Reset Password Endpoint
-router.post("/reset-password/:token", async (req, res) => {
-  try {
-    console.log(req.params);
-    const { token } = req.params;
-    const { newPassword } = req.body;
-
-    // Validate inputs
-    if (!token || !newPassword) {
-      return res.status(400).json({ message: "Token and new password are required", value: 0 });
+router.post("/fp-otp-verification", async (req, res) => {
+  // Your implementation
+  const { email ,otp} = req.body;
+  if(!email||!otp){
+    res.status(400).json({message:"email or otp is not recieved" ,val:0})
+    
+  }
+  
+  const userdetails=await UserInfo.findOne({email})
+  if(!userdetails){
+    res.status(400).json({message:"email not existed",val:1})
+  }
+  try{
+    
+    if(userdetails.otp === otp){
+      res.status(200).json({message:"verified sucessfully",val:2})
+      console.log(userdetails)
+    }else{
+      res.status(400).json({message:"otp invalid",val:3})
     }
-
-    // Verify token
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (err) {
-      return res.status(400).json({ message: "Invalid or expired token", value: 1 });
-    }
-
-    // Find user by decoded token
-    const user = await UserInfo.findById(decoded._id);
-    if (!user || user.resetToken !== token) {
-      return res.status(400).json({ message: "Invalid or expired token", value: 1 });
-    }
-
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-    // Update user's password and clear reset token
-    user.password = hashedPassword;
-    user.resetToken = null;
-    await user.save();
-
-    res.status(200).json({ message: "Password reset successfully", value: 2 });
-  } catch (error) {
-    console.error("Error in /reset-password:", error);
-    res.status(500).json({ message: "Internal server error", value: 3 });
+  }
+  catch(err){
+    res.status(500).json({message:"internal error",val:4})
+    console.log("error :" ,err )
   }
 });
+
+
+// Reset Password Endpoint
+router.post("/resetpassword",async(req,res)=>{
+  const {email,newPassword}=req.body
+  if(!email||!newPassword){
+    res.status(400).json({message:"email or password is not recieved" ,val:0})
+    
+  }
+  try{
+    const userdetails=await UserInfo.findOne({email})
+     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+     userdetails.password=hashedNewPassword
+     console.log("1",userdetails.password)
+     console.log("2",hashedNewPassword)
+     await userdetails.save()
+     res.status(200).json({message:"updated password",val:1})
+    }
+  catch(err){
+    res.status(500).json({message:"internal serror", val:2})
+  }
+})
+
 module.exports = router;
