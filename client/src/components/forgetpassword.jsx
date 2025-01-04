@@ -42,22 +42,70 @@ const ForgotPassword = () => {
       }
   };
 
-  const handleOtpVerification = () => {
-    
-    if (otp === "1234") { // Mock OTP verification
-      console.log("OTP verified");
-      setStep("reset"); // Proceed to reset password step
-    } else {
-      alert("Invalid OTP");
+  const handleOtpVerification = async() => {
+    try{
+      console.log(otp)
+      console.log(email)
+      const response=await axios.post("http://localhost:3000/login/fp-otp-verification",{email,otp})
+      const val=response.data.val
+      switch (val) {
+        case 0:
+          console.log(response.data.message);
+          
+          break;
+        case 1:
+          console.log(response.data.message);
+          
+          break;
+        case 2:
+          console.log(response.data.message);
+          setStep("reset");
+          break;
+        case 3:
+          console.log(response.data.message);
+          break;
+       default:
+        console.log("internal error")
+        break;
+}
+
+      
+    }
+    catch(err){
+      console.log("error:",err)
     }
   };
 
-  const handlePasswordReset = () => {
-    if (newPassword === confirmPassword && newPassword) {
-      console.log("Password successfully reset");
-      alert("Password reset successful! You can now log in with your new password.");
-      // Redirect to login page or handle post-reset logic
-    } else {
+  const handlePasswordReset = async() => {
+    if (newPassword === confirmPassword ) {
+      try{
+        const response=await axios.post("http://localhost:3000/login/resetpassword",{email,newPassword})
+        const val=response.data.val 
+        switch (val) {
+          case 0:
+            console.log(response.data.message);
+            
+            break;
+          case 1:
+            console.log(response.data.message);
+            
+            
+            break;
+          case 2:
+            console.log(response.data.message);
+            
+            break;
+          
+         default:
+          console.log("internals error")
+          break;
+      }
+
+    } 
+    catch(err){
+      console.log(err)
+    }}
+    else {
       alert("Passwords do not match!");
     }
   };
