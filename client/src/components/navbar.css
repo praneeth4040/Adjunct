@@ -1,0 +1,112 @@
+.navbar-container {
+    background-color: #ffffff; /* Background color for the whole navbar */
+    padding: 10px; /* Adjust padding for smaller height */
+}
+
+.navbar-header {
+    font-size: 24px; /* Font size for the header */
+    font-weight: bold;
+    color: #1a73e8; /* Distinct color for "myAi" */
+     /* Add spacing between header and icon section */
+    text-align: left; /* Align "myAi" to the left */
+    padding: 10px;
+    background-color: #ffffff; /* Background color for the header section */
+    border-radius: 5px;
+}
+
+.navbar-grid {
+    display: flex;
+    justify-content: center; /* Center align the icons */
+    align-items: center; /* Vertically center align the icons */
+    width: 100%;
+    gap: 60px; /* Even spacing between icons */
+    background-color: #ffffff; /* Different background for the icons section */
+    padding: 20px;
+    border-radius: 8px;
+    flex-wrap: wrap; /* Wrap icons if the screen size is smaller */
+    height: 96px;
+    position: relative; /* For smooth animations */
+}
+
+.navbar-item {
+    text-decoration: none;
+    color: #333;
+    text-align: center;
+    width: 60px; /* Fixed width for consistency */
+    transition: transform 0.3s ease, background-color 0.3s ease, width 0.5s ease, height 0.5s ease;
+    padding: 10px; /* Padding around each icon block */
+    border-radius: 8px;
+    background-color: #ffffff; /* Background for each icon block */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for better aesthetics */
+    height: 60px;
+    width: 60px;
+    cursor: pointer; /* Pointer cursor for interaction */
+}
+
+.navbar-item:hover {
+    transform: translateY(-3px); /* Slight hover animation */
+    background-color: #d1eaff; /* Hover background */
+}
+
+.navbar-item.active {
+    background-color: #d1eaff; /* Active background */
+    color: #1a73e8;
+    font-weight: bold;
+    transform: scale(1.3); /* Enlarge active icon */
+}
+
+.navbar-icon {
+    font-size: 32px; /* Size of the icons */
+    margin-bottom: 5px; /* Spacing between icon and label */
+   
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-item.active .navbar-icon {
+    filter: grayscale(0%); /* Restore color for active */
+}
+
+.navbar-label {
+    font-size: 14px; /* Label font size */
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.navbar-item.active .navbar-label {
+    color: #000; /* Bolder black for active */
+}
+
+/* Decreasing size animation for non-active icons */
+.navbar-item.shrink-1 {
+    transform: scale(0.9); /* First level smaller */
+}
+
+.navbar-item.shrink-2 {
+    transform: scale(0.8); /* Second level smaller */
+}
+
+.navbar-item.shrink-3 {
+    transform: scale(0.7); /* Third level smaller */
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-grid {
+        gap: 40px; /* Reduce spacing on smaller screens */
+    }
+
+    .navbar-item {
+        width: 60px; /* Adjust icon block width for smaller screens */
+        padding: 10px;
+    }
+
+    .navbar-icon {
+        font-size: 24px; /* Reduce icon size for smaller screens */
+    }
+
+    .navbar-label {
+        font-size: 12px; /* Reduce label font size */
+    }
+}

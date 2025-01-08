@@ -4,16 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { showToast } from './totify';
 
 
-
-
 function Signin() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [RetypePassword, setRetypePassword] = useState("");
   const navigate = useNavigate();
-
+ 
+    
+    
+   
   
+  const handleFailure=async(e)=>{
+    console.log("signin failed")
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -107,8 +111,27 @@ function Signin() {
             </div>
             <button type="submit" className="btn btn-primary w-100">Sign Up</button>
           </form>
-        </div>
-      </div>
+          <div className="mt-3">
+            
+              
+          <div className="mt-3">
+            {/* Google Sign-In Button */}
+            <button
+              className="btn btn-google w-100"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
+              <i className="bi bi-google" style={{ marginRight: "8px", fontSize: "20px" }}></i>
+              Sign in with Google
+            </button>
+          </div>
+            
+          </div>
+
+</div>
+
+          </div>
+        
+      
     </main>
   );
 }
