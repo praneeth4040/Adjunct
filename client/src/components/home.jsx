@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function Home() {
   const location = useLocation();
@@ -28,8 +29,10 @@ function Home() {
     };
   }, [location.state?.userName]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    
+      const response = await axios.post("http://localhost:3000/askai", { email, message });
     console.log('Email:', email);
     console.log('Message:', message);
 
@@ -47,7 +50,7 @@ function Home() {
           className="container d-flex justify-content-center align-items-center flex-grow-1 text-center"
           style={{
             position: 'absolute',
-            top: '30%',
+            top: '33%',
             right: '100px',
           }}
         >
@@ -67,7 +70,7 @@ function Home() {
           className="bg-light py-3 text-center"
           style={{
             position: 'relative',
-            top: '55%',
+            top: '40%',
           }}
         >
           <form onSubmit={handleSubmit}>

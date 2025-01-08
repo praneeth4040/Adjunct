@@ -12,8 +12,23 @@ import PrivateRoute from './components/privateroute';
 import Setup from './components/setup';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {gapi} from "gapi-script"
+import { useEffect } from 'react';
+
+const clientId="512918008312-n1dh10cocbjqu8m3iu87ijcmi41eillg.apps.googleusercontent.com"
+
 
 function App() {
+ useEffect(()=>{
+  function start(){
+    gapi.client.init({
+      clientId: clientId,
+      scope:""
+    })
+  };
+  gapi.load("client:auth2",start);
+ })
+ var accessToken=gapi.auth.getToken().access_Token;
   const router = createBrowserRouter([
     {
       path: '/home',
