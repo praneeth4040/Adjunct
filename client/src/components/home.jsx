@@ -21,7 +21,7 @@ function Home() {
     }
 
     // Disable scrolling when the component is mounted
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = '';
 
     // Re-enable scrolling when the component is unmounted (cleanup)
     return () => {
@@ -50,7 +50,7 @@ function Home() {
           className="container d-flex justify-content-center align-items-center flex-grow-1 text-center"
           style={{
             position: 'absolute',
-            top: '33%',
+            top: '43%',
             right: '100px',
           }}
         >

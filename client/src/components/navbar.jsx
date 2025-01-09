@@ -20,14 +20,18 @@ function Navbar() {
   // Define navigation items based on logged-in status
   const navItems = isLoggedIn
     ? [
-        { path: "/profile", label: "Profile", icon: "👤" },
-        { path: "/home", label: "Home", icon: "🏠" },
-        { path: "/setup", label: "Setup", icon: "⚙️" },
-      ]
-    : [
-        
-        { path: "/login", label: "Login", icon: "🔑" },
-        { path: "/signin", label: "SignIn", icon: "📝" },
+      { path: "/profile", label: "Profile", icon: "👤" },
+      { path: "/home", label: "Home", icon: "🏠" },
+      { path: "/setup", label: "Setup", icon: "⚙️" },
+      { path: "/about", label: "About us", icon: "ℹ️" }, // Information icon for About Us
+      { path: "/blogs", label: "Blogs", icon: "📰" },    // Newspaper icon for Blogs
+    ]
+  : [
+      { path: "/about", label: "About us", icon: "ℹ️" }, // Information icon for About Us
+      { path: "/login", label: "Login", icon: "🔑" },
+      { path: "/signin", label: "Sign In", icon: "✍️" }, // Writing hand icon for Sign In
+      { path: "/blogs", label: "Blogs", icon: "📰" },    // Newspaper icon for Blogs
+    
       ];
 
   const handleClick = (index) => {

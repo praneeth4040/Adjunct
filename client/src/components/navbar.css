@@ -1,16 +1,16 @@
 .navbar-container {
-    background-color: #ffffff; /* Background color for the whole navbar */
+    background-color: #A07855ff; /* Background color for the whole navbar */
     padding: 10px; /* Adjust padding for smaller height */
 }
 
 .navbar-header {
     font-size: 24px; /* Font size for the header */
     font-weight: bold;
-    color: #1a73e8; /* Distinct color for "myAi" */
+    color: black; /* Distinct color for "myAi" */
      /* Add spacing between header and icon section */
     text-align: left; /* Align "myAi" to the left */
     padding: 10px;
-    background-color: #ffffff; /* Background color for the header section */
+    background-color: #A07855ff; /* Background color for the header section */
     border-radius: 5px;
 }
 
@@ -20,11 +20,11 @@
     align-items: center; /* Vertically center align the icons */
     width: 100%;
     gap: 60px; /* Even spacing between icons */
-    background-color: #ffffff; /* Different background for the icons section */
+    background-color: #D4b996ff; /* Different background for the icons section */
     padding: 20px;
     border-radius: 8px;
     flex-wrap: wrap; /* Wrap icons if the screen size is smaller */
-    height: 96px;
+    height: 150px;
     position: relative; /* For smooth animations */
 }
 

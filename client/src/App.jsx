@@ -14,21 +14,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {gapi} from "gapi-script"
 import { useEffect } from 'react';
-
-const clientId="512918008312-n1dh10cocbjqu8m3iu87ijcmi41eillg.apps.googleusercontent.com"
+import About from './components/aboutas';
+import Blogs from './components/blogs';
 
 
 function App() {
- useEffect(()=>{
-  function start(){
-    gapi.client.init({
-      clientId: clientId,
-      scope:""
-    })
-  };
-  gapi.load("client:auth2",start);
- })
- var accessToken=gapi.auth.getToken().access_Token;
+ 
+ 
+ 
   const router = createBrowserRouter([
     {
       path: '/home',
@@ -90,6 +83,17 @@ function App() {
           <Setup />
         </PrivateRoute>
       )
+    }
+    ,
+    {
+      path: '/about',
+      element: (<>
+      <Navbar/>
+      <About /></>)
+    },
+    {
+      path: '/blogs',
+      element: (<><Navbar/><Blogs /></>)
     }
   ]);
 
