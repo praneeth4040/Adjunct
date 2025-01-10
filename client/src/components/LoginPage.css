@@ -1,0 +1,73 @@
+/* Overall Background */
+.login-container {
+    background: linear-gradient(135deg, #1e90ff, #87cefa); /* Blue gradient theme */
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* Login Card */
+  .login-card {
+    background-color: #ffffff;
+    padding: 2rem 3rem;
+    border-radius: 10px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Form Labels */
+  .form-label {
+    font-weight: bold;
+    color: #333333;
+  }
+  
+  /* Input Fields */
+  .form-control {
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    padding: 0.8rem;
+  }
+  
+  .form-control:focus {
+    border-color: #1e90ff;
+    box-shadow: 0px 0px 5px rgba(30, 144, 255, 0.5);
+  }
+  
+  /* Submit Button */
+  .btn-primary {
+    background-color: #1e90ff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0d74cc;
+    box-shadow: 0px 4px 10px rgba(30, 144, 255, 0.4);
+  }
+  
+  /* Links */
+  .text-link {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  .text-link:hover {
+    color: #0d74cc;
+    text-decoration: underline;
+  }
+  
+  /* Center Text */
+  .text-center {
+    text-align: center;
+  }
+  
+  /* Button Full Width */
+  .btn-block {
+    width: 100%;
+  }
+  

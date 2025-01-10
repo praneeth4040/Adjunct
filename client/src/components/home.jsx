@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function Home() {
   const location = useLocation();
@@ -20,7 +21,7 @@ function Home() {
     }
 
     // Disable scrolling when the component is mounted
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = '';
 
     // Re-enable scrolling when the component is unmounted (cleanup)
     return () => {
@@ -28,8 +29,10 @@ function Home() {
     };
   }, [location.state?.userName]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    
+      const response = await axios.post("http://localhost:3000/askai", { email, message });
     console.log('Email:', email);
     console.log('Message:', message);
 
@@ -40,13 +43,14 @@ function Home() {
 
   return (
     <>
+    
       <div className="d-flex flex-column justify-content-between" style={{ height: '100vh' }}>
         {/* Main content */}
         <div
           className="container d-flex justify-content-center align-items-center flex-grow-1 text-center"
           style={{
             position: 'absolute',
-            top: '30%',
+            top: '43%',
             right: '100px',
           }}
         >
@@ -66,7 +70,7 @@ function Home() {
           className="bg-light py-3 text-center"
           style={{
             position: 'relative',
-            top: '55%',
+            top: '40%',
           }}
         >
           <form onSubmit={handleSubmit}>
@@ -75,10 +79,10 @@ function Home() {
               <label htmlFor="emailInput" className="col-sm-2 col-form-label">
                 Email address
               </label>
-              <div className="col-sm-10">
+              <div className="input-group rounded border p-2" style={{ maxWidth: "900px", backgroundColor: "#f8f9fa" }} >
                 <input
                   type="email"
-                  className="form-control"
+                  className="form-control border-0"
                   id="emailInput"
                   placeholder="name@example.com"
                   value={email}
@@ -88,33 +92,46 @@ function Home() {
             </div>
 
             {/* Message Input */}
-            <div className="mb-3 row align-items-center">
-              <label htmlFor="messageTextarea" className="col-sm-2 col-form-label">
-                Your Message
-              </label>
-              <div className="col-sm-8">
-                <textarea
-                  className="form-control"
-                  id="messageTextarea"
-                  placeholder="give your msg"
-                  rows={0}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-              </div>
-              <div className="col-sm-2">
-                <button
-                  className="btn btn-success w-100"
-                  id="sendButton"
-                  type="submit"
-                  style={{
-                    borderRadius: '5px',
-                  }}
-                >
-                  <i className="bi bi-send" style={{ color: 'white' }}> generate</i>
-                </button>
-              </div>
-            </div>
+            <div className="mb-3 row ">
+  <label htmlFor="messageTextarea" className="col-sm-2 col-form-label">
+    Your Message
+  </label>
+  
+  <div className="input-group rounded border p-2" style={{ maxWidth: "600px", backgroundColor: "#f8f9fa" }}>
+      <input
+        id="searchInput"
+        type="message"
+        className="form-control border-0"
+        placeholder="give your msg"
+        aria-label="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        style={{ backgroundColor: "transparent", boxShadow: "none" }}
+      />
+      <button
+        className="btn btn-outline-secondary border-0"
+        type="button"
+      
+        aria-label="Voice search"
+      >
+        <i className="bi bi-mic" style={{ fontSize: "1.2rem" }}></i>
+      </button>
+    </div>
+  </div>
+
+  
+  <div className="col-sm-2">
+    <button
+      className="btn btn-success w-100"
+      id="sendButton"
+      type="submit"
+      style={{
+        borderRadius: '5px',
+      }}
+    >
+      <i className="bi bi-send" style={{ color: 'white' }}> generate</i>
+    </button>
+  </div>
           </form>
         </footer>
       </div>
