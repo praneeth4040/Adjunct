@@ -7,7 +7,6 @@
     font-size: 24px; /* Font size for the header */
     font-weight: bold;
     color: black; /* Distinct color for "myAi" */
-     /* Add spacing between header and icon section */
     text-align: left; /* Align "myAi" to the left */
     padding: 10px;
     background-color: #A07855ff; /* Background color for the header section */
@@ -33,7 +32,7 @@
     color: #333;
     text-align: center;
     width: 60px; /* Fixed width for consistency */
-    transition: transform 0.3s ease, background-color 0.3s ease, width 0.5s ease, height 0.5s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease;
     padding: 10px; /* Padding around each icon block */
     border-radius: 8px;
     background-color: #ffffff; /* Background for each icon block */
@@ -43,6 +42,7 @@
     cursor: pointer; /* Pointer cursor for interaction */
 }
 
+/* Simplified hover effect */
 .navbar-item:hover {
     transform: translateY(-3px); /* Slight hover animation */
     background-color: #d1eaff; /* Hover background */
@@ -58,7 +58,6 @@
 .navbar-icon {
     font-size: 32px; /* Size of the icons */
     margin-bottom: 5px; /* Spacing between icon and label */
-   
     transition: filter 0.3s ease, transform 0.3s ease;
 }
 
@@ -75,21 +74,6 @@
 .navbar-item.active .navbar-label {
     color: #000; /* Bolder black for active */
 }
-
-/* Decreasing size animation for non-active icons */
-.navbar-item.shrink-1 {
-    transform: scale(0.9); /* First level smaller */
-}
-
-.navbar-item.shrink-2 {
-    transform: scale(0.8); /* Second level smaller */
-}
-
-.navbar-item.shrink-3 {
-    transform: scale(0.7); /* Third level smaller */
-}
-
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
