@@ -9,7 +9,11 @@ const Login = require('./components/login');
 const verifyToken = require('./middleware/verifyToken')
 const sendMail = require("./components/sendMail");
 const setUp = require("./components/setUp");
-
+const getData = require('./components/getData');
+const passport = require("passport");
+const session = require("express-session");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const UserInfo=require("./schemas/userInfoSchema")
 
 const app = express();
 const PORT = process.env.PORT ||3000;
@@ -29,16 +33,34 @@ app.use('/signup',signup);
 app.use('/login',Login);
 app.use('/sendMail',sendMail);
 app.use('/setup',setUp);
+app.use('/getData',getData);
+
+
 
 app.post('/askAi',verifyToken,async(req,res)=>{
-     const { userPrompt ,mailId } = req.body;
-      const fullPrompt =  await generator(userPrompt);
+    
+    
+      
+    const userEmail=req.user.email
+    const user= await UserInfo.findOne({email:userEmail})
+    console.log(user)
+
+     const { userPrompt} = req.body;
+     console.log(userPrompt)
+     const promptUserDetails= {
+        "userPrompt": userPrompt,
+        "user":user,
+        "emailApi":false  
+      }
+      const fullPrompt =  await generator(promptUserDetails);
+      console.log(fullPrompt)
     if(fullPrompt){
-    res.status(200).json(fullPrompt);
+    res.status(200).json({generatedPrompt:fullPrompt});
     }else{
         res.status(400).json("give correct prompt");
     }
 })
+
 app.listen(PORT , ()=>{
     console.log(`the app is listening to`,PORT);
 })

@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
  async function generator(Prompt){
-const prompt = Prompt;
+const prompt = JSON.stringify(Prompt);
 const result = await model.generateContent(prompt);
 return result.response.text();
 }

@@ -1,118 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import "./navbar.css"; // Ensure this CSS file contains the necessary styles
 
 function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [activeLink, setActiveLink] = useState(''); // Track the active link
-    const location = useLocation(); // Get the current route
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null); // Track the index of the active link
+  const location = useLocation(); // Get the current route
 
-    // Simulate checking user authentication status (replace with real logic)
-    useEffect(() => {
-        const token = localStorage.getItem('authToken'); // Example: Check token in localStorage
-        setIsLoggedIn(!!token); // Set true if token exists
-        setActiveLink(location.pathname); // Set active link based on current route
-    }, [location]);
+  useEffect(() => {
+    const token = localStorage.getItem("authToken"); // Check auth status
+    setIsLoggedIn(!!token); // Set true if token exists
 
-    const linkStyle = (path) => ({
-        color: activeLink === path ? '#fff' : '#ccc',
-        
-        padding: '2px 10px',
-        borderRadius: '5px',
-        fontWeight: activeLink === path ? 'bold' : 'normal',
-        transition: '0.3s ease',
-    });
+    // Automatically set the active link based on the route
+    const currentPath = location.pathname;
+    const index = navItems.findIndex((item) => item.path === currentPath);
+    setActiveIndex(index >= 0 ? index : null);
+  }, [location]);
 
-    return (
-        <div>
-            <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#012730" }}>
-                <div className="container">
-                    <a className="navbar-brand" href="#">myAi</a>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto">
-                            {!isLoggedIn ? (
-                                <>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/"
-                                            className="nav-link"
-                                            style={linkStyle('/')}
-                                            onClick={() => setActiveLink('/')}
-                                        >
-                                            Home
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/login"
-                                            className="nav-link"
-                                            style={linkStyle('/login')}
-                                            onClick={() => setActiveLink('/login')}
-                                        >
-                                            Login
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/signin"
-                                            className="nav-link"
-                                            style={linkStyle('/signin')}
-                                            onClick={() => setActiveLink('/signin')}
-                                        >
-                                            Sign In
-                                        </Link>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/profile"
-                                            className="nav-link"
-                                            style={linkStyle('/profile')}
-                                            onClick={() => setActiveLink('/profile')}
-                                        >
-                                            Profile
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/home"
-                                            className="nav-link"
-                                            style={linkStyle('/home')}
-                                            onClick={() => setActiveLink('/home')}
-                                        >
-                                            home
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link
-                                            to="/setup"
-                                            className="nav-link"
-                                            style={linkStyle('/setup')}
-                                            onClick={() => setActiveLink('/setup')}
-                                        >
-                                            Setup
-                                        </Link>
-                                    </li>
-                                </>
-                            )}
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    );
+  // Define navigation items based on logged-in status
+  const navItems = isLoggedIn
+    ? [
+        { path: "/profile", label: "Profile", icon: "👤" },
+        { path: "/home", label: "Home", icon: "🏠" },
+       
+        { path: "/about", label: "About", icon: "ℹ️" },
+        { path: "/blogs", label: "Blogs", icon: "📰" },
+        // New item example
+      ]
+    : [
+        { path: "/about", label: "About us", icon: "ℹ️" },
+        { path: "/login", label: "Login", icon: "🔑" },
+        { path: "/signin", label: "Sign In", icon: "✍️" },
+        { path: "/blogs", label: "Blogs", icon: "📰" },
+      ];
+
+  const handleClick = (index) => {
+    setActiveIndex(index); // Set the clicked index as active
+  };
+
+  return (
+    <nav className="navbar-container">
+      <div className="navbar-header">myAi</div>
+      <div className="navbar-grid">
+        {navItems.map((item, index) => {
+          return (
+            <Link
+              to={item.path}
+              key={item.path}
+              className={`navbar-item ${activeIndex === index ? "active" : ""}`}
+              onClick={() => handleClick(index)}
+            >
+              <div className="navbar-icon">{item.icon}</div>
+              <div className="navbar-label">{item.label}</div>
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
 }
 
 export default Navbar;

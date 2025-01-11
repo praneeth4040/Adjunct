@@ -12,8 +12,16 @@ import PrivateRoute from './components/privateroute';
 import Setup from './components/setup';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {gapi} from "gapi-script"
+import { useEffect } from 'react';
+import About from './components/aboutas';
+import Blogs from './components/blogs';
+
 
 function App() {
+ 
+ 
+ 
   const router = createBrowserRouter([
     {
       path: '/home',
@@ -75,6 +83,17 @@ function App() {
           <Setup />
         </PrivateRoute>
       )
+    }
+    ,
+    {
+      path: '/about',
+      element: (<>
+      <Navbar/>
+      <About /></>)
+    },
+    {
+      path: '/blogs',
+      element: (<><Navbar/><Blogs /></>)
     }
   ]);
 
