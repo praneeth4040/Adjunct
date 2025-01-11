@@ -5,11 +5,12 @@ import axios from 'axios';
 function Home() {
   const location = useLocation();
   const [name, setName] = useState(localStorage.getItem('userName') || 'Guest');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+ 
+  const [userPrompt, setUserPrompt] = useState('');
   const [chatMessages, setChatMessages] = useState([]); // To store chat messages
   const [hasInteracted, setHasInteracted] = useState(false); // To track if user clicked the generate button
   const chatContainerRef = useRef(null); // Reference to the chat container for auto-scrolling
+
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -42,19 +43,21 @@ function Home() {
     // Add the user's input as a message in the chat (on the right)
     const newChatMessages = [
       ...chatMessages,
-      { type: 'user', content: ` ${message}` },
+      { type: 'user', content: ` ${userPrompt}` },
     ];
     setChatMessages(newChatMessages);
-
+    console.log(userPrompt)
     try {
-      const response = await axios.post('http://localhost:3000/askai', { email, message });
+      const token = localStorage.getItem('authToken');
+      const response = await axios.post('http://localhost:3000/askAi',{ userPrompt},{headers:{'Authorization':`Bearer ${token}`}} );
       
       // Add the AI-generated result to the chat (on the left)
-      const generatedContent = response.data.generatedContent || 'No content generated.';
+      const generatedContent = response.data.generatedPrompt || 'No content generated.';
+      console.log(generatedContent)
       setChatMessages([ ...newChatMessages, { type: 'ai', content: generatedContent } ]);
 
-      setEmail('');
-      setMessage('');
+      
+      setUserPrompt('');
     } catch (error) {
       console.error('Error generating message:', error);
       setChatMessages([ ...newChatMessages, { type: 'ai', content: 'An error occurred. Please try again.' } ]);
@@ -140,8 +143,8 @@ function Home() {
                   type="text"
                   className="form-control border-0"
                   placeholder="Type your message..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={userPrompt}
+                  onChange={(e) => setUserPrompt(e.target.value)}
                   required
                   style={{
                     borderRadius: '8px',
