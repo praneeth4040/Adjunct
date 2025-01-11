@@ -22,8 +22,8 @@ function Navbar() {
     ? [
         { path: "/profile", label: "Profile", icon: "👤" },
         { path: "/home", label: "Home", icon: "🏠" },
-        { path: "/setup", label: "Setup", icon: "⚙️" },
-        { path: "/about", label: "About us", icon: "ℹ️" },
+       
+        { path: "/about", label: "About", icon: "ℹ️" },
         { path: "/blogs", label: "Blogs", icon: "📰" },
         // New item example
       ]

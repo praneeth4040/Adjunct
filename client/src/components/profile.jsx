@@ -51,57 +51,36 @@ function Profile() {
   }
 
   return (
-    <main>
-      <div className="container d-flex justify-content-center align-items-center vh-100">
-        <div className="card p-4 shadow" style={{ width: '25rem' }}>
-          <div className="text-center mb-4">
-            <i className="bi bi-person-bounding-box fs-2"></i>
-          </div>
-
-          {/* User Information */}
-          <div className="mb-3">
-            <div className="d-flex justify-content-between">
-              <strong>Username:</strong>
-              <span>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={user.name}  // Dynamically use user data
-                  disabled
-                />
-              </span>
-            </div>
-            <div className="d-flex justify-content-between">
-              <strong>Login Mail:</strong>
-              <span>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={user.email}  // Dynamically use user data
-                  disabled
-                />
-              </span>
-            </div>
-            <div className="d-flex justify-content-between">
-              <strong>Using Mail:</strong>
-              <span>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={user.aiEmail || 'N/A'}  // Dynamically use AI-generated email (if exists)
-                  disabled
-                />
-              </span>
+    <div className="container mt-5 d-flex justify-content-center">
+    <div className="card text-center " style={{ width: "22rem", borderRadius: "20px" }}>
+      <div className="card-body">
+        
+        <div className="mb-4">
+            <div
+              className="rounded-circle d-flex justify-content-center align-items-center bg-primary text-white"
+              style={{
+                width: "100px",
+                height: "100px",
+                fontSize: "40px",
+                margin: "0 auto",
+              }}
+            >
+              {user.name.charAt(0).toUpperCase()}
             </div>
           </div>
-
-          <div className="d-grid">
-            <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
-          </div>
+        <h5 className="card-title mb-1">{user.name}</h5>
+        <p className="text-muted mb-4"></p>
+        <div className="mb-4">
+          <h6 className="text-primary mb-1">user email</h6>
+          <p className="text-muted">{user.email}</p>
         </div>
+        <div>
+            <button className="btn btn-info w-100" onClick={handleLogout}>Logout</button>
+          </div>
       </div>
-    </main>
-  );
+    </div>
+  </div>
+)
 }
 
 export default Profile;
