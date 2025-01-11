@@ -97,20 +97,6 @@ function Signin() {
                 </div>
                 <button type="submit" className="btn btn-primary w-100">Sign Up</button>
               </form>
-
-              {/* Divider */}
-              <div className="text-center my-3">
-                <span>----------- or --------------</span>
-              </div>
-
-              {/* Google Sign-In Button */}
-              <button
-                className="btn btn-google w-100"
-                style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-              >
-                <i className="bi bi-google" style={{ marginRight: "8px", fontSize: "20px" }}></i>
-                Sign in with Google
-              </button>
             </div>
           </div>
 
