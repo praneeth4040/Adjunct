@@ -21,17 +21,15 @@ function Navbar() {
   const navItems = isLoggedIn
     ? [
         { path: "/profile", label: "Profile", icon: "👤" },
-        { path: "/home", label: "Home", icon: "🏠" },
-       
-        { path: "/about", label: "About", icon: "ℹ️" },
-        { path: "/blogs", label: "Blogs", icon: "📰" },
-        // New item example
+        { path: "/home", label: "Home" },
+        { path: "/about", label: "About" },
+        { path: "/blogs", label: "permissions" },
       ]
     : [
-        { path: "/about", label: "About us", icon: "ℹ️" },
-        { path: "/login", label: "Login", icon: "🔑" },
-        { path: "/signin", label: "Sign In", icon: "✍️" },
-        { path: "/blogs", label: "Blogs", icon: "📰" },
+        { path: "/about", label: "About us" },
+        { path: "/login", label: "Login" },
+        { path: "/signin", label: "Sign In" },
+     
       ];
 
   const handleClick = (index) => {
@@ -39,25 +37,44 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar-container">
-      <div className="navbar-header">myAi</div>
-      <div className="navbar-grid">
-        {navItems.map((item, index) => {
-          return (
-            <Link
-              to={item.path}
-              key={item.path}
-              className={`navbar-item ${activeIndex === index ? "active" : ""}`}
-              onClick={() => handleClick(index)}
-            >
-              <div className="navbar-icon">{item.icon}</div>
-              <div className="navbar-label">{item.label}</div>
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
+    <div>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#012730" }}>
+        <div className="container">
+          <a className="navbar-brand" href="#">myAi</a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
+              {navItems.map((item, index) => (
+                <li className="nav-item" key={item.path}>
+                  <Link
+                    className={`nav-link ${activeIndex === index ? "active" : ""}`}
+                    to={item.path}
+                    onClick={() => handleClick(index)}
+                  >
+                    {item.icon && <span>{item.icon}</span>} {/* Display icon if exists */}
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
   );
 }
 
 export default Navbar;
+
+ 
