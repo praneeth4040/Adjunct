@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-
 function Home() {
   const location = useLocation();
   const [name, setName] = useState(localStorage.getItem('userName') || 'Guest');
   const [userPrompt, setUserPrompt] = useState('');
+  const [recipientAddress, setRecipientAddress] = useState('');
   const [chatMessages, setChatMessages] = useState([]); // To store chat messages
   const [hasInteracted, setHasInteracted] = useState(false); // To track if user clicked the generate button
   const chatContainerRef = useRef(null); // Reference to the chat container for auto-scrolling
@@ -87,16 +87,25 @@ function Home() {
 
   const handleSend = (id) => {
     const messageToSend = chatMessages.find((message) => message.id === id);
-    if (messageToSend) {
-    const response=axios.post("http://localhost:3000/sendmail",messageToSend.content)
-      // Add your API call for sending the message here
+    if (messageToSend && recipientAddress) {
+      alert(`Email sent to ${recipientAddress}: ${messageToSend.content}`);
+      // Add your email sending logic here
+    } else {
+      alert('Please enter a valid recipient address.');
     }
   };
 
   // Check if the prompt is related to sending an email
   const isEmailPrompt = (prompt) => {
-    return prompt.toLowerCase().includes('send an email') || prompt.toLowerCase().includes('write an email');
+    return (
+      prompt.toLowerCase().includes('send a mail') ||
+      prompt.toLowerCase().includes('generate email') ||
+      prompt.toLowerCase().includes('draft a mail')
+    );
   };
+
+  // Function to copy content to clipboard
+  
 
   return (
     <>
@@ -145,6 +154,7 @@ function Home() {
                   margin: '5px 0',
                   wordWrap: 'break-word',
                   whiteSpace: 'pre-wrap',
+                  position: 'relative',
                 }}
               >
                 {message.isEditable ? (
@@ -156,23 +166,34 @@ function Home() {
                 ) : (
                   <span>{message.content}</span>
                 )}
-                {/* Only show Edit and Send for email-related prompts */}
+
+                {/* Only show Edit, Send and Recipient input for email-related prompts */}
                 {message.type === 'ai' && isEmailPrompt(message.content) && (
-                  <div className="mt-2 d-flex justify-content-end">
-                    {!message.isEditable && (
+                  <div className="mt-2">
+                    <input
+                      type="email"
+                      className="form-control mb-2"
+                      placeholder="Enter recipient email address"
+                      value={recipientAddress}
+                      onChange={(e) => setRecipientAddress(e.target.value)}
+                      required
+                    />
+                    <div className="d-flex justify-content-end">
+                      {!message.isEditable && (
+                        <button
+                          className="btn btn-secondary btn-sm me-2"
+                          onClick={() => handleEdit(message.id)}
+                        >
+                          Edit
+                        </button>
+                      )}
                       <button
-                        className="btn btn-secondary btn-sm me-2"
-                        onClick={() => handleEdit(message.id)}
+                        className="btn btn-success btn-sm"
+                        onClick={() => handleSend(message.id)}
                       >
-                        Edit
+                        Send
                       </button>
-                    )}
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() => handleSend(message.id)}
-                    >
-                      Send
-                    </button>
+                    </div>
                   </div>
                 )}
               </div>
