@@ -14,6 +14,7 @@ const passport = require("passport");
 const session = require("express-session");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserInfo=require("./schemas/userInfoSchema")
+const auth = require("./components/auth")
 
 const app = express();
 const PORT = process.env.PORT ||3000;
@@ -34,6 +35,7 @@ app.use('/login',Login);
 app.use('/sendMail',sendMail);
 app.use('/setup',setUp);
 app.use('/getData',getData);
+app.use("/auth",auth);
 
 
 

@@ -16,6 +16,7 @@ import {gapi} from "gapi-script"
 import { useEffect } from 'react';
 import About from './components/aboutas';
 import Blogs from './components/blogs';
+import Check from './components/check';
 
 
 function App() {
@@ -47,6 +48,15 @@ function App() {
         <PrivateRoute>
           <Navbar />
           <Profile />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: '/check',
+      element: (
+        <PrivateRoute>
+          <Navbar />
+          <Check />
         </PrivateRoute>
       ),
     },
