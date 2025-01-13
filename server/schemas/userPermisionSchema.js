@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   accessToken: { type: String, required: true },
   refreshToken: { type: String, required: true },
   email: { type: String, required: true },
+  name: {type:String,required:true}
 });
 
 const UserPermission = mongoose.model('UserPermission', userSchema);

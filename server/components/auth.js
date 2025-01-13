@@ -3,8 +3,9 @@ const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const { google } = require('googleapis');
-const mongoose = require('mongoose');
+
 const UserPermission = require('../schemas/userPermisionSchema'); // Mongoose model to store user data
+const { redirect } = require('react-router-dom');
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ passport.use(new (require('passport-google-oauth20').Strategy)({
         accessToken,
         refreshToken,
         email: profile.emails[0].value,
+        name: profile.displayName
       });
       await newUser.save();
     }
@@ -103,7 +105,8 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
       }
 
       // Respond back with a success message
-      res.send('Authenticated and stored in database successfully!');
+      res.redirect("http://localhost:5173/home")
+      res.send("authenticated successfully")
     } catch (err) {
       console.error('Error storing user data:', err);
       res.status(500).send('Internal server error');
