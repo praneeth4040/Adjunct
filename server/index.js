@@ -52,7 +52,7 @@ app.post('/askAi',verifyToken,async(req,res)=>{
      const promptUserDetails= {
         "userPrompt": userPrompt,
         "user":user,
-        
+        "generatedResponse":null,
         "emailApi":false  ,
         "receiptentemailid":null,
         "subject":null,
@@ -62,6 +62,7 @@ app.post('/askAi',verifyToken,async(req,res)=>{
       console.log(fullPrompt)
     if(fullPrompt){
     res.status(200).json({generatedPrompt:fullPrompt});
+    console.log(fullPrompt)
     }else{
         res.status(400).json("give correct prompt");
     }

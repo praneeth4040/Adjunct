@@ -6,7 +6,7 @@ function Home() {
   const location = useLocation();
   const [name, setName] = useState(localStorage.getItem('userName') || 'Guest');
   const [userPrompt, setUserPrompt] = useState('');
-  const [recipientAddress, setRecipientAddress] = useState('');
+ 
   const [chatMessages, setChatMessages] = useState([]); // To store chat messages
   const [hasInteracted, setHasInteracted] = useState(false); // To track if user clicked the generate button
   const chatContainerRef = useRef(null); // Reference to the chat container for auto-scrolling
@@ -36,7 +36,7 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setHasInteracted(true);
-
+    setUserPrompt('');
     // Add the user's input as a message in the chat (on the right)
     const newChatMessages = [
       ...chatMessages,
@@ -51,15 +51,30 @@ function Home() {
         { userPrompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      const subject=response.data.generatedPrompt.subject
+        const body=response.data.generatedPrompt.body
+        const recipient=response.data.generatedPrompt.receiptentemailid
+      if(response.data.generatedPrompt.emailAPI&&subject&&body&&recipient){
+        
+          setChatMessages([
+          ...newChatMessages,
+          { id: Date.now(), type: 'ai', content: {subject, "\n":
+            body,"\n": recipient }, isEditable: false },
+        ]);
+  
+      }else{
+        const generatedContent = response.data.generatedPrompt.generatedResponse || 'No content generated.';
+        
+        setChatMessages([
+          ...newChatMessages,
+          { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false },
+        ]);
+  
+      }
+     
+      
 
-      // Add the AI-generated result to the chat (on the left)
-      const generatedContent = response.data.generatedPrompt || 'No content generated.';
-      setChatMessages([
-        ...newChatMessages,
-        { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false },
-      ]);
-
-      setUserPrompt('');
+      
     } catch (error) {
       console.error('Error generating message:', error);
       setChatMessages([
@@ -96,15 +111,7 @@ function Home() {
   };
 
   // Check if the prompt is related to sending an email
-  const isEmailPrompt = (prompt) => {
-    return (
-      prompt.toLowerCase().includes('send a mail') ||
-      prompt.toLowerCase().includes('generate email') ||
-      prompt.toLowerCase().includes('draft a mail')
-    );
-  };
-
-  // Function to copy content to clipboard
+  //nction to copy content to clipboard
   
 
   return (
@@ -168,16 +175,9 @@ function Home() {
                 )}
 
                 {/* Only show Edit, Send and Recipient input for email-related prompts */}
-                {message.type === 'ai' && isEmailPrompt(message.content) && (
+                {/* {message.type === 'ai' (
                   <div className="mt-2">
-                    <input
-                      type="email"
-                      className="form-control mb-2"
-                      placeholder="Enter recipient email address"
-                      value={recipientAddress}
-                      onChange={(e) => setRecipientAddress(e.target.value)}
-                      required
-                    />
+                   
                     <div className="d-flex justify-content-end">
                       {!message.isEditable && (
                         <button
@@ -195,7 +195,7 @@ function Home() {
                       </button>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             ))}
           </div>
