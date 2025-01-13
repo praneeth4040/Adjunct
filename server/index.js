@@ -52,7 +52,11 @@ app.post('/askAi',verifyToken,async(req,res)=>{
      const promptUserDetails= {
         "userPrompt": userPrompt,
         "user":user,
-        "emailApi":false  
+        
+        "emailApi":false  ,
+        "receiptent emailid":null,
+        "subject":null,
+        "body":null
       }
       const fullPrompt =  await generator(promptUserDetails);
       console.log(fullPrompt)
