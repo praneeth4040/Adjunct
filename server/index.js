@@ -54,7 +54,7 @@ app.post('/askAi',verifyToken,async(req,res)=>{
         "user":user,
         
         "emailApi":false  ,
-        "receiptent emailid":null,
+        "receiptentemailid":null,
         "subject":null,
         "body":null
       }
