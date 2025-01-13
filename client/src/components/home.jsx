@@ -105,13 +105,7 @@ function Home() {
   };
 
   // Function to copy content to clipboard
-  const handleCopy = (content) => {
-    navigator.clipboard.writeText(content).then(() => {
-      alert('Copied to clipboard!');
-    }).catch((err) => {
-      console.error('Failed to copy: ', err);
-    });
-  };
+  
 
   return (
     <>
@@ -163,21 +157,6 @@ function Home() {
                   position: 'relative',
                 }}
               >
-                {/* Copy Button */}
-                <button
-                  className="btn btn-light btn-sm"
-                  style={{
-                    position: 'absolute',
-                    left: '-30px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    borderRadius: '50%',
-                  }}
-                  onClick={() => handleCopy(message.content)}
-                >
-                  <i className="bi bi-clipboard" style={{ fontSize: '16px' }}></i>
-                </button>
-
                 {message.isEditable ? (
                   <textarea
                     className="form-control"
