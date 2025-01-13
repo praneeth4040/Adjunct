@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import About from './components/aboutas';
 import Blogs from './components/blogs';
 import Check from './components/check';
+import Verifypage from './components/verifypage';
 
 
 function App() {
@@ -39,6 +40,15 @@ function App() {
         <>
           <Navbar />
           <LoginPage />
+        </>
+      ),
+    },
+    {
+      path: '/Verifypage',
+      element: (
+        <>
+          <Navbar />
+          <Verifypage />
         </>
       ),
     },
