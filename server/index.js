@@ -54,14 +54,16 @@ app.post('/askAi',verifyToken,async(req,res)=>{
         "user":user,
         "generatedResponse":null,
         "emailApi":false  ,
-        "receiptentemailid":null,
+        "receiptentEmailId":null,
         "subject":null,
         "body":null
       }
       const fullPrompt =  await generator(promptUserDetails);
-      console.log("data sent to the frontend by the backend = ",fullPrompt)
+      console.log(fullPrompt)
     if(fullPrompt){
     res.status(200).json({generatedPrompt:fullPrompt});
+    
+    console.log(fullPrompt)
     }else{
         res.status(400).json("give correct prompt");
     }

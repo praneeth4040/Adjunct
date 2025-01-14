@@ -51,14 +51,10 @@ function Home() {
         { userPrompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(typeof response.data.generatedPrompt);
-     const jsonGeneratedResponse = response.data.generatedPrompt.replace(/```json | ```/, ' ').trim();
-     console.log(jsonGeneratedResponse)
-       jsonGeneratedResponse = JSON.parse(jsonGeneratedResponse);
-      console.log( typeof jsonGeneratedResponse);
+      const jsonGeneratedResponse=response.data.generatedPrompt
       const subject=jsonGeneratedResponse.subject
         const body = jsonGeneratedResponse.body
-        const recipient=jsonGeneratedResponse.receiptentemailid
+        const recipient=jsonGeneratedResponse.receiptentEmailId
         console.log("subject :",subject);
         console.log("body ", body);
         console.log("recipient", recipient);
@@ -67,12 +63,18 @@ function Home() {
         
           setChatMessages([
           ...newChatMessages,
-          { id: Date.now(), type: 'ai', content: {subject, "\n":
-            body,"\n": recipient }, isEditable: false },
+          { id: Date.now(), type: 'ai', content : "subject: " + subject + "\n" + "body: " + body 
+            ,isEditable: true },
+            <button
+            className="btn btn-success btn-sm"
+            onClick={() => handleSend(message.id)}
+          >
+            Send
+          </button>
         ]);
   
       }else{
-        const generatedContent = response.data.generatedPrompt.generatedResponse || 'No content generated.';
+        const generatedContent = jsonGeneratedResponse.generatedResponse;
         
         setChatMessages([
           ...newChatMessages,
@@ -93,13 +95,7 @@ function Home() {
     }
   };
 
-  const handleEdit = (id) => {
-    setChatMessages((prevMessages) =>
-      prevMessages.map((message) =>
-        message.id === id ? { ...message, isEditable: true } : message
-      )
-    );
-  };
+  
 
   const handleSave = (id, newContent) => {
     setChatMessages((prevMessages) =>
