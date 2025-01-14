@@ -106,7 +106,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
 
       // Respond back with a success message
       res.redirect("http://localhost:5173/home")
-      res.send("authenticated successfully")
+      
     } catch (err) {
       console.error('Error storing user data:', err);
       res.status(500).send('Internal server error');
