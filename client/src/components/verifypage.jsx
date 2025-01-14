@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     const [promptResult, setPromptResult] = useState('');
@@ -21,6 +20,7 @@ function App() {
     };
 
     // Handle sending the result
+    
     const handleSend = () => {
         if (isEditable) {
             alert('Please save your changes before sending.');

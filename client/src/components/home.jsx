@@ -51,10 +51,19 @@ function Home() {
         { userPrompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      const subject=response.data.generatedPrompt.subject
-        const body=response.data.generatedPrompt.body
-        const recipient=response.data.generatedPrompt.receiptentemailid
-      if(response.data.generatedPrompt.emailAPI&&subject&&body&&recipient){
+      console.log(typeof response.data.generatedPrompt);
+     const jsonGeneratedResponse = response.data.generatedPrompt.replace(/```json | ```/, ' ').trim();
+     console.log(jsonGeneratedResponse)
+       jsonGeneratedResponse = JSON.parse(jsonGeneratedResponse);
+      console.log( typeof jsonGeneratedResponse);
+      const subject=jsonGeneratedResponse.subject
+        const body = jsonGeneratedResponse.body
+        const recipient=jsonGeneratedResponse.receiptentemailid
+        console.log("subject :",subject);
+        console.log("body ", body);
+        console.log("recipient", recipient);
+        console.log("response.data.generatedPrompt = ",jsonGeneratedResponse);
+      if(jsonGeneratedResponse.emailAPI&&subject&&body&&recipient){
         
           setChatMessages([
           ...newChatMessages,
