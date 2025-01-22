@@ -14,7 +14,7 @@ const getNewAccessToken = async (refreshToken) => {
 };
 
 // Function to send an email
-const sendEmail = async (userId) => {
+const sendEmail = async (subject , receiptent , body , userId) => {
   // Retrieve user data from the database
   const user = await UserPermission.findById(userId);
   if (!user) {
