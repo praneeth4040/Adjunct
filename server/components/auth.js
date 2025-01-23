@@ -3,7 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const { google } = require('googleapis');
-
+const UserInfo = require('../schemas/userInfoSchema')
 const UserPermission = require('../schemas/userPermisionSchema'); // Mongoose model to store user data
 const { redirect } = require('react-router-dom');
 
@@ -100,8 +100,10 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
           accessToken:accessToken,
           refreshToken:refreshToken,
           email: profile.emails[0].value,
+          name:profile.displayName
         });
         await newUser.save();
+
       }
 
       // Respond back with a success message
