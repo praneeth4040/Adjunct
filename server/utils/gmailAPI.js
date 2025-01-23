@@ -14,9 +14,9 @@ const getNewAccessToken = async (refreshToken) => {
 };
 
 // Function to send an email
-const sendEmail = async (subject , receiptent , body , userId) => {
+const sendEmail = async (subject , receiptent , body , googleId) => {
   // Retrieve user data from the database
-  const user = await UserPermission.findById(userId);
+  const user = await UserPermission.findById(googleId);
   if (!user) {
     console.log('User not found');
     return;
@@ -38,11 +38,11 @@ const sendEmail = async (subject , receiptent , body , userId) => {
 
   // Prepare the email content
   const message = [
-    `From: "message from adjunct" <${user.email}>`, // User's email as sender
-    'To: 23r21a0585@mlrit.ac.in',
-    'Subject: Test email from Gmail API',
+    `From: ${user.email}`, // User's email as sender
+    `To: ${receiptent}`,
+    `Subject: ${subject}`,
     '',
-    'This is a test email sent from the Gmail API!',
+    `${body}`,
   ].join('\n');
 
   const encodedMessage = Buffer.from(message).toString('base64');
