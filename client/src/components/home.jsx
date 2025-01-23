@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { Slab } from 'react-loading-indicators'; // Import the loading indicator
 
 function Home() {
   const location = useLocation();
   const [name, setName] = useState(localStorage.getItem('userName') || 'Guest');
   const [userPrompt, setUserPrompt] = useState('');
- 
-  const [chatMessages, setChatMessages] = useState([]); // To store chat messages
-  const [hasInteracted, setHasInteracted] = useState(false); // To track if user clicked the generate button
-  const chatContainerRef = useRef(null); // Reference to the chat container for auto-scrolling
+  const [chatMessages, setChatMessages] = useState([]);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [sendButton, setSendButton] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -27,7 +29,6 @@ function Home() {
   }, [location.state?.userName]);
 
   useEffect(() => {
-    // Scroll to the bottom of chat container whenever a new message is added
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
@@ -37,7 +38,7 @@ function Home() {
     e.preventDefault();
     setHasInteracted(true);
     setUserPrompt('');
-    // Add the user's input as a message in the chat (on the right)
+    setLoading(true); // Set loading to true
     const newChatMessages = [
       ...chatMessages,
       { id: Date.now(), type: 'user', content: userPrompt, isEditable: false },
@@ -51,51 +52,41 @@ function Home() {
         { userPrompt },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      const jsonGeneratedResponse=response.data.generatedPrompt
-      const subject=jsonGeneratedResponse.subject
-        const body = jsonGeneratedResponse.body
-        const recipient=jsonGeneratedResponse.receiptentEmailId
-        console.log("subject :",subject);
-        console.log("body ", body);
-        console.log("recipient", recipient);
-        console.log("response.data.generatedPrompt = ",jsonGeneratedResponse);
-      if(jsonGeneratedResponse.emailAPI&&subject&&body&&recipient){
-        
-          setChatMessages([
+      const jsonGeneratedResponse = response.data.generatedPrompt;
+      const subject = jsonGeneratedResponse.subject;
+      const body = jsonGeneratedResponse.body;
+      const recipient = jsonGeneratedResponse.receiptentEmailId;
+
+      if (jsonGeneratedResponse.emailAPI && subject && body && recipient) {
+        setSendButton(true);
+        setChatMessages([
           ...newChatMessages,
-          { id: Date.now(), type: 'ai', content : "subject: " + subject + "\n" + "body: " + body 
-            ,isEditable: true },
-            <button
-            className="btn btn-success btn-sm"
-            onClick={() => handleSend(message.id)}
-          >
-            Send
-          </button>
+          {
+            id: Date.now(),
+            type: 'ai',
+            content:
+              'receipent: ' + recipient + '\n' + 'subject: ' + subject + '\n' + 'body: ' + body,
+            isEditable: true,
+          },
         ]);
-  
-      }else{
+      } else {
         const generatedContent = jsonGeneratedResponse.generatedResponse;
-        
+        setSendButton(false);
         setChatMessages([
           ...newChatMessages,
           { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false },
         ]);
-  
       }
-     
-      
-
-      
     } catch (error) {
       console.error('Error generating message:', error);
       setChatMessages([
         ...newChatMessages,
         { id: Date.now(), type: 'ai', content: 'An error occurred. Please try again.', isEditable: false },
       ]);
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
-
-  
 
   const handleSave = (id, newContent) => {
     setChatMessages((prevMessages) =>
@@ -106,18 +97,9 @@ function Home() {
   };
 
   const handleSend = (id) => {
-    const messageToSend = chatMessages.find((message) => message.id === id);
-    if (messageToSend && recipientAddress) {
-      alert(`Email sent to ${recipientAddress}: ${messageToSend.content}`);
-      // Add your email sending logic here
-    } else {
-      alert('Please enter a valid recipient address.');
-    }
+    try {
+    } catch {}
   };
-
-  // Check if the prompt is related to sending an email
-  //nction to copy content to clipboard
-  
 
   return (
     <>
@@ -125,18 +107,33 @@ function Home() {
         {/* Welcome message */}
         {!hasInteracted && (
           <div
-            className="d-flex justify-content-center align-items-center"
+            className="d-flex flex-column align-items-center"
             style={{
               position: 'absolute',
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              color: '#28a745',
+              textAlign: 'center',
             }}
           >
-            <p>Welcome, {name}!</p>
+            <h1
+              style={{
+                fontSize: '32px',
+                fontWeight: 'bold',
+                color: '#28a745',
+                marginBottom: '10px',
+              }}
+            >
+              Welcome, {name}!
+            </h1>
+            <h4
+              style={{
+                fontSize: '20px',
+                color: '#007bff',
+              }}
+            >
+              give permission to get access of your PA
+            </h4>
           </div>
         )}
 
@@ -179,30 +176,22 @@ function Home() {
                   <span>{message.content}</span>
                 )}
 
-                {/* Only show Edit, Send and Recipient input for email-related prompts */}
-                {/* {message.type === 'ai' (
+                {message.type === 'ai' && sendButton && (
                   <div className="mt-2">
-                   
-                    <div className="d-flex justify-content-end">
-                      {!message.isEditable && (
-                        <button
-                          className="btn btn-secondary btn-sm me-2"
-                          onClick={() => handleEdit(message.id)}
-                        >
-                          Edit
-                        </button>
-                      )}
-                      <button
-                        className="btn btn-success btn-sm"
-                        onClick={() => handleSend(message.id)}
-                      >
-                        Send
-                      </button>
-                    </div>
+                    <button className="btn btn-success btn-sm" onClick={() => handleSend(message.id)}>
+                      Send
+                    </button>
                   </div>
-                )} */}
+                )}
               </div>
             ))}
+
+            {/* Loading Indicator */}
+            {loading && (
+              <div className="text-center my-3">
+                <Slab color="#32cd32" size="medium" text="ON YOUR WORK SIR" textColor="" />
+              </div>
+            )}
           </div>
         )}
 

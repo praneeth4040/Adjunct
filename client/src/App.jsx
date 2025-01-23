@@ -113,7 +113,7 @@ function App() {
     },
     {
       path: '/blogs',
-      element: (<><Navbar/><Blogs /></>)
+      element: (<>        <PrivateRoute><Navbar/><Blogs />        </PrivateRoute></>)
     }
   ]);
 
