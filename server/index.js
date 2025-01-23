@@ -14,7 +14,6 @@ const passport = require("passport");
 const session = require("express-session");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserInfo=require("./schemas/userInfoSchema")
-const sendMailAPI = require('./components/sendMailAPI')
 const auth = require("./components/auth")
 
 const app = express();
@@ -37,7 +36,6 @@ app.use('/sendMail',sendMail);
 app.use('/setup',setUp);
 app.use('/getData',getData);
 app.use("/auth",auth);
-app.use("/sendMailAPI",sendMailAPI);
 
 
 
