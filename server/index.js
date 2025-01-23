@@ -15,7 +15,7 @@ const session = require("express-session");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserInfo=require("./schemas/userInfoSchema")
 const auth = require("./components/auth")
-
+const sendMailAPI=require("./components/sendMailAPI")
 const app = express();
 const PORT = process.env.PORT ||3000;
 const connection = process.env.mongodb
@@ -36,6 +36,7 @@ app.use('/sendMail',sendMail);
 app.use('/setup',setUp);
 app.use('/getData',getData);
 app.use("/auth",auth);
+app.use('/sendemail',sendMailAPI);
 
 
 

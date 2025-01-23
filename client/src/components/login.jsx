@@ -104,14 +104,14 @@ function LoginPage() {
 
           {/* Right Column: Video */}
           <div className="col-md-6 d-flex justify-content-center align-items-center">
-            <video
-              src="path-to-your-video.mp4"
-              className="w-100 shadow" style={{ height:"400px"}}
-              autoPlay
-              loop
-              muted
-            ></video>
-          </div>
+  <img
+    src="\assets\ilcons Chapter 6 (2).png" // Path relative to the public folder
+    className="w-100 shadow"
+    alt="Illustration"
+    style={{ height: "400px", objectFit: "cover", borderRadius: "10px" }}
+  />
+</div>
+
         </div>
       </div>
     </main>
