@@ -18,7 +18,7 @@ const sendEmail = async (subject , receiptent , body , googleId) => {
   // Retrieve user data from the database
   const user = await UserPermission.findById(googleId);
   if (!user) {
-    console.log('User not found');
+    console.log('User not found and give permission');
     return;
   }
 
