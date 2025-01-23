@@ -43,12 +43,13 @@ async function generator(Prompt) {
   const result = await chatSession.sendMessage(prompt);
   let sending=result.response.text();
    
-console.log(typeof sending)
+console.log("1" ,typeof sending)
 let tofrontend = sending
+
 .replace(/```/g, "")
 .replace(/json/g, "");
 tofrontend=JSON.parse(tofrontend)
-    console.log(typeof tofrontend)
+    console.log("2",typeof tofrontend)
     console.log(tofrontend)
     return tofrontend;
 }

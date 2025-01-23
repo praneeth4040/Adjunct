@@ -9,18 +9,19 @@ const router = express.Router();
 router.post("/",verifyToken,(req,res)=>{
     try{
     const user = req.user;
-    const {subject , receiptent, body}= req.body;
-    const userDetails = userInfo.findOne(email = user.email)
+    const {subject , recipient, body}= req.body;
+    const userDetails = userInfo.findOne({email:user.email})
     if(!userDetails){
         res.status(400).json({message:"the user doesn't exist"})
     }
     console.log("userDetails :",userDetails)
-    if(!subject | !receiptent | !body){
+    console.log(subject,recipient)
+    if(!subject | !recipient ){
         res.status(400).json({message:"subject or receiptent or body is missing"})
     }
 
 
-    sendMail(subject,receiptent,body,userDetails.googleId); // just function ni call chestunav and work chestunav
+    sendMail(subject,recipient,body,userDetails.googleId); // just function ni call chestunav and work chestunav
 
     
     }catch(err){
