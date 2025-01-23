@@ -58,6 +58,7 @@ router.post("/", async (req, res) => {
       otp,
       otpExpiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
       isVerified: false,
+    
     });
     console.log("user to be saved",newUser);
     await newUser.save(); 
