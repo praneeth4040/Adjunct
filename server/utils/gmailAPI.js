@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const UserPermission = require('../schemas/userPermisionSchema'); // MongoDB User model
 const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 // Function to get a new access token using the refresh token
 const getNewAccessToken = async (refreshToken) => {
