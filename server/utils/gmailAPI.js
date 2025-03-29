@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const UserPermission = require('../schemas/userPermisionSchema'); // MongoDB User model
+const jwt = require('jsonwebtoken')
 
 // Function to get a new access token using the refresh token
 const getNewAccessToken = async (refreshToken) => {
@@ -16,7 +17,8 @@ const getNewAccessToken = async (refreshToken) => {
 // Function to send an email
 const sendEmail = async (subject , receiptent , body , googleId) => {
   // Retrieve user data from the database
-  const user = await UserPermission.findById(googleId);
+  try{
+  const user = await UserPermission.findOne({googleId: googleId});
   if (!user) {
     console.log('User not found and give permission');
     return;
@@ -53,14 +55,27 @@ const sendEmail = async (subject , receiptent , body , googleId) => {
   });
 
   console.log('Email sent:', res.data);
+  return res.data;
+}catch(err){
+  console.log(err);
+  return err;
+}
 };
 
 // Function to check if the access token has expired
 const hasAccessTokenExpired = (accessToken) => {
-  // You can check the expiration of the access token using a JWT library
-  // For now, let's assume it expires in 1 hour and we always refresh after 1 hour
-  const currentTime = Date.now() / 1000; // current time in seconds
+  if (!accessToken) {
+    console.error('Access token is null or undefined');
+    return true; // Consider it expired if the token is missing
+  }
+
   const decodedToken = jwt.decode(accessToken);
+  if (!decodedToken || !decodedToken.exp) {
+    console.error('Failed to decode access token or missing exp property');
+    return true; // Treat as expired if decoding fails
+  }
+
+  const currentTime = Date.now() / 1000; // Current time in seconds
   return decodedToken.exp < currentTime;
 };
 
