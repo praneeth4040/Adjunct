@@ -31,7 +31,7 @@ passport.use(new (require('passport-google-oauth20').Strategy)({
     console.log(profile)
     
     const existingUser = await UserPermission.findOne({ googleId: profile.id });
-
+  
     if (existingUser) {
       existingUser.accessToken = accessToken;
       existingUser.refreshToken = refreshToken;
@@ -85,6 +85,12 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
     console.log('Authenticated successfully', profile);
 
     try {
+      //adding the googleId to userInfoSchema
+      const existingUserInfo = await UserInfo.findOne({email :profile.emails[0].value})
+      if(existingUserInfo){
+        existingUserInfo.googleId = googleId;
+        await existingUserInfo.save();
+      }
       // Check if the user already exists in the database
       const existingUser = await UserPermission.findOne({ googleId });
 
