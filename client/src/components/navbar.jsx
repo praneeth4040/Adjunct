@@ -39,7 +39,7 @@ function Navbar() {
   return (
     <div>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#012730" }}>
+      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171A1F" }}>
         <div className="container">
           <a className="navbar-brand" href="#">myAi</a>
           <button

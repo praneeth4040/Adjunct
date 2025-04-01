@@ -42,8 +42,6 @@ app.use('/sendemail',sendMailAPI);
 
 app.post('/askAi',verifyToken,async(req,res)=>{
     
-    
-      
     const userEmail=req.user.email
     const user= await UserInfo.findOne({email:userEmail})
     console.log(user)

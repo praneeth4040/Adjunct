@@ -93,7 +93,11 @@ function App() {
     },
     {
       path: '/',
-      element: <OpenPage />,
+      element: (
+        <>
+         <Navbar />
+         <OpenPage />
+        </>)
     },
     {
       path: '/Setup',

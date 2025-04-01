@@ -34,7 +34,63 @@ async function generator(Prompt) {
       {
         role: "model",
         parts: [
-          {text: "json\n{\n  \"userPrompt\": \"Summarize the latest sales report.\",\n  \"user\": \"John Doe\",\n  \"emailAPI\": false,\n  \"receiptentEmailId\": null,\n  \"subject\": null,\n  \"body\": null,\n  \"generatedResponse\":\"Okay, I will summarize the latest sales report.\"\n}\n\njson\n{\n  \"userPrompt\": \"Email the report to sales@example.com\",\n  \"user\": \"John Doe\",\n  \"emailAPI\": true,\n   \"receiptentEmailId\": \"sales@example.com\",\n  \"subject\": \"Sales Report\",\n  \"body\": \"Please find the attached sales report.\",\n    \"generatedResponse\":null\n}\n\njson\n{\n  \"userPrompt\": \"Mail this to john\",\n  \"user\": \"John Doe\",\n  \"emailAPI\": true,\n  \"receiptentEmailId\": null,\n  \"subject\": \"Information from John Doe\",\n  \"body\": \"Please find the attached information.\",\n    \"generatedResponse\":\"Please provide the recipient's email address.\"\n}\n\njson\n{\n  \"userPrompt\": \"Send this to john@example.com with the subject line Important Update\",\n    \"user\": \"John Doe\",\n    \"emailAPI\": true,\n    \"receiptentEmailId\": \"john@example.com\",\n    \"subject\": \"Important Update\",\n    \"body\": \"Please find the attached information.\",\n      \"generatedResponse\": null\n  }\n\n\njson\n{\n  \"userPrompt\": \"Email the monthly report\",\n  \"user\": \"John Doe\",\n  \"emailAPI\": true,\n  \"receiptentEmailId\": null,\n  \"subject\": null,\n  \"body\": null,\n  \"generatedResponse\":\"Email the monthly report. Please provide the recipient's email address.\"\n}\n\njson\n{\n    \"userPrompt\": \"What is the weather like today?\",\n    \"user\": \"Jane Smith\",\n    \"emailAPI\": false,\n    \"receiptentEmailId\": null,\n    \"subject\": null,\n    \"body\": null,\n    \"generatedResponse\":\"I can look up the weather for you, Jane.\"\n  }\n\n"},
+          {
+            text: `json
+        {
+          "userPrompt": "Summarize the latest sales report.",
+          "user": "John Doe",
+          "emailAPI": false,
+          "receiptentEmailId": null,
+          "subject": null,
+          "body": null,
+          "generatedResponse": "The latest sales report shows a 15% increase in revenue compared to the previous quarter, driven by strong performance in the electronics and home appliances categories."
+        }
+        
+        json
+        {
+          "userPrompt": "Write an essay about climate change in 5 lines.",
+          "user": "Jane Smith",
+          "emailAPI": false,
+          "receiptentEmailId": null,
+          "subject": null,
+          "body": null,
+          "generatedResponse": "Climate change refers to long-term shifts in temperatures and weather patterns caused by human activities. Burning fossil fuels increases greenhouse gases, leading to global warming. Effects include rising sea levels, extreme weather, and ecosystem disruptions. Addressing it requires renewable energy and global cooperation. Immediate action is essential to mitigate its impact."
+        }
+        
+        json
+        {
+          "userPrompt": "Write an essay about climate change in 10 lines.",
+          "user": "Jane Smith",
+          "emailAPI": false,
+          "receiptentEmailId": null,
+          "subject": null,
+          "body": null,
+          "generatedResponse": "Climate change refers to long-term shifts in temperatures and weather patterns caused by human activities, particularly the burning of fossil fuels. These activities release greenhouse gases like carbon dioxide and methane into the atmosphere, trapping heat and causing global warming. The effects of climate change are widespread, including rising sea levels, more frequent and severe weather events, and disruptions to ecosystems. Polar ice caps are melting, leading to habitat loss for species like polar bears. Coastal areas face increased flooding risks. Agriculture is also affected, with changing weather patterns impacting crop yields. Addressing climate change requires a global effort to reduce greenhouse gas emissions. Transitioning to renewable energy sources like solar and wind is crucial. Governments, businesses, and individuals must work together to adopt sustainable practices. Immediate action is essential to mitigate its long-term impact."
+        }
+        
+        json
+        {
+          "userPrompt": "Generate a 3-line summary of the book 'To Kill a Mockingbird'.",
+          "user": "John Doe",
+          "emailAPI": false,
+          "receiptentEmailId": null,
+          "subject": null,
+          "body": null,
+          "generatedResponse": "Harper Lee's 'To Kill a Mockingbird' explores themes of racial injustice and moral growth in the American South. The story is narrated by Scout Finch, whose father, Atticus, defends a black man falsely accused of a crime. Through Scout's eyes, the novel examines prejudice, empathy, and the loss of innocence."
+        }
+        
+        json
+        {
+          "userPrompt": "Write a 2-line summary of the weather today.",
+          "user": "Jane Smith",
+          "emailAPI": false,
+          "receiptentEmailId": null,
+          "subject": null,
+          "body": null,
+          "generatedResponse": "The weather today is sunny with a high of 25°C and a low of 15°C. There is no chance of rain, making it a perfect day for outdoor activities."
+        }
+        `
+          },
         ],
       },
     ],
@@ -45,13 +101,19 @@ async function generator(Prompt) {
    
 console.log("1" ,typeof sending)
 let tofrontend = sending
+  .replace(/```/g, "")
+  .replace(/json/g, "")
+  .trim();
 
-.replace(/```/g, "")
-.replace(/json/g, "");
-tofrontend=JSON.parse(tofrontend)
-    console.log("2",typeof tofrontend)
-    console.log(tofrontend)
+  try {
+    tofrontend = JSON.parse(tofrontend); // Parse the JSON string
+    console.log("2", typeof tofrontend);
+    console.log(tofrontend);
     return tofrontend;
+  } catch (error) {
+    console.error("Error parsing JSON:", error.message);
+    console.error("Invalid JSON string:", tofrontend);
+    throw new Error("Failed to parse JSON response from the model.");
+  }
 }
-
 module.exports=generator;

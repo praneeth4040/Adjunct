@@ -8,9 +8,9 @@ function OpenPage()  {
     return ( <>
     <div>
       {/* Navbar */}
-      <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#012730" }}>
+     {/* <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#000000" }}>
         <div className="container">
-          <a className="navbar-brand" href="#">myAi</a>
+          <a className="navbar-brand" href="#">Adjunct</a>
           <button
             className="navbar-toggler"
             type="button"
@@ -32,10 +32,10 @@ function OpenPage()  {
             </ul>
           </div>
         </div>
-      </nav>
+      </nav>*/}
 
       {/* Main Content */}
-      <div className="text-center text-white py-5" style={{ 
+    {<div className="text-center text-white py-5" style={{ 
         minHeight: "100vh", 
         
         background: "linear-gradient(135deg, rgb(14, 29, 56), rgb(13, 106, 128))" 
@@ -54,7 +54,7 @@ function OpenPage()  {
           <p className="lead"> <strong>myAi</strong> helps students and professionals save time by automatically generating and sending email responses using AI-powered prompts. Streamline your communication with personalized, professional emails tailored to your needs, without the hassle of writing or replying manually.</p>
           
         </div>
-      </div>
+      </div> }
     </div>
 
   
