@@ -1,64 +1,107 @@
 import React from 'react';
-import axios from 'axios';
-import { useState } from 'react';
-import {Link} from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-function OpenPage()  {
+import Logo  from './vaibhav.webp'
 
-    return ( <>
-    <div>
-      {/* Navbar */}
-     {/* <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#000000" }}>
-        <div className="container">
-          <a className="navbar-brand" href="#">Adjunct</a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  <i className="bi bi-search"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>*/}
-
-      {/* Main Content */}
-    {<div className="text-center text-white py-5" style={{ 
-        minHeight: "100vh", 
-        
-        background: "linear-gradient(135deg, rgb(14, 29, 56), rgb(13, 106, 128))" 
-      }}>
-        <div className="container" style={{
-            position: 'absolute',
-            top: '30%', // Position input
-            right: '100px'
-        }}>
+function OpenPage() {
+  return (
+    <div className="text-center text-white" style={{
+      minHeight: '100vh',
+      
+      backgroundColor: '#000000',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '0 20px'
+    }}>
+      <div className="container" style={{ marginBottom: '80px' , marginTop:'150px'}}>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '0.6rem' }}>Personalized AI for Your Needs</h1>
+        <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>Discover the perfect AI companion tailored to your requirements, whether for work or daily activities.</p>
+        <button style={{
+          backgroundColor: '#FFA500',
+          color: 'white',
          
-          <h1 className="display-3 fw-bold mb-4">Introducing myAi</h1>
-          <div className="mb-4">
-            <button className="btn btn-primary btn-lg me-2" ><Link to="/login" style={{ color:"white"}}>Try myAi</Link></button>
-           
-          </div>
-          <p className="lead"> <strong>myAi</strong> helps students and professionals save time by automatically generating and sending email responses using AI-powered prompts. Streamline your communication with personalized, professional emails tailored to your needs, without the hassle of writing or replying manually.</p>
-          
-        </div>
-      </div> }
-    </div>
+          fontSize: '1.2rem',
+          fontWeight: '1rem',
+          borderRadius: '10px',
+          padding: '12px 40px',
+          border: 'none'
+        }}>
+          Try for Free
+        </button>
+      </div>
 
-  
-    </> );
+      <div className="container mt-5" style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '140px',
+        flexWrap: 'wrap',
+        marginTop: '160px'
+      }}>
+        <div className="text-center" style={{ maxWidth: '300px' }}>
+          <i className="bi bi-gear" style={{ fontSize: '2rem', color: 'white' }}></i>
+          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Customizable Solutions</p>
+          <p style={{ fontSize: '1rem' }}>Tailor the AI's capabilities to fit your individual needs and preferences.</p>
+        </div>
+        <div className="text-center" style={{ maxWidth: '300px' }}>
+          <i className="bi bi-laptop" style={{ fontSize: '2rem', color: 'white' }}></i>
+          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Work & Personal Use</p>
+          <p style={{ fontSize: '1rem' }}>Utilize the AI for professional tasks as well as for managing your day-to-day activities.</p>
+        </div>
+        <div className="text-center" style={{ maxWidth: '300px' }}>
+          <i className="bi bi-shield-lock" style={{ fontSize: '2rem', color: 'white' }}></i>
+          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Secure Data Handling</p>
+          <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
+        </div>
+      </div>
+
+      {/* Footer Section */}
+      <footer style={{
+        backgroundColor: '#171A1F',
+        color: 'white',
+        padding: '60px 360px',
+        marginTop: '100px',
+        textAlign: 'center'
+      }}>
+        <img src={Logo} alt="Adjunct Logo" style={{ height: '100px', width: 'auto' }} />
+        <p>Subscribe to our newsletter</p>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+          <input type="email" placeholder="Input your email" style={{ padding: '10px', borderRadius: '5px', border: 'none', width: '250px' }} />
+          <button style={{ backgroundColor: '#F39C12', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px' }}>Subscribe</button>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '50px', marginTop: '30px' }}>
+          <div>
+            <h4>Product</h4>
+            <p>Features</p>
+            <p>Pricing</p>
+          </div>
+          <div>
+            <h4>Resources</h4>
+            <p>Blog</p>
+            <p>User guides</p>
+            <p>Webinars</p>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <p>About us</p>
+            <p>Contact us</p>
+          </div>
+          <div>
+            <h4>Plans & Pricing</h4>
+            <p>Personal</p>
+            <p>Start up</p>
+            <p>Organization</p>
+          </div>
+        </div>
+        <p style={{ marginTop: '20px', fontSize: '0.8rem' }}>© 2024 Brand, Inc. · Privacy · Terms · Sitemap</p>
+        <div style={{ display: 'flex', justifyContent: 'right', gap: '15px', marginTop: '20px' }}>
+          <i className="bi bi-twitter" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
+          <i className="bi bi-facebook" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
+          <i className="bi bi-linkedin" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
+          <i className="bi bi-youtube" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
+        </div>
+      </footer>
+    </div>
+  );
 }
 
 export default OpenPage;
