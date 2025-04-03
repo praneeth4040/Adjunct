@@ -55,12 +55,15 @@ function Home() {
       const response = await axios.post(
         'http://localhost:3000/askAi',
         { userPrompt },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } ,
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+        }
       );
 
       const jsonGeneratedResponse = response.data.generatedPrompt;
 
-      if (jsonGeneratedResponse.emailAPI) {
+      if (jsonGeneratedResponse.emailAPI === true || jsonGeneratedResponse.emailApi === true) {
         const { subject, receiptentEmailId: recipient, body } = jsonGeneratedResponse;
 
         setEmailData({ subject, recipient, body });
