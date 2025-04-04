@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { showToast } from './totify';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 function Signin() {
   const [name, setName] = useState("");
@@ -54,84 +55,160 @@ function Signin() {
             borderRadius: '10px',
           }}
         >
-          <h1 className="text-center mb-2" style={{ color: '#007bff' }}>
+          <h1 className="text-center mb-2" style={{ color: '#21618c' }}>
             Create Account
           </h1>
           <p className="text-center mb-4" style={{ color: '#b3b3b3' }}>
             Sign up to get started
           </p>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="text" className="form-label" style={{ color: '#b3b3b3' }}>
-                Name
-              </label>
+            <div
+              className="mb-3 d-flex align-items-center"
+              style={{
+                backgroundColor: '#2c2c2c',
+                borderRadius: '8px',
+                padding: '5px 10px',
+                border: '1px solid #444',
+              }}
+            >
+              <FaUser style={{ color: '#b3b3b3', marginRight: '10px' }} />
               <input
                 type="text"
                 className="form-control"
                 id="Name"
+                placeholder="Your Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
                 style={{
-                  backgroundColor: '#2c2c2c',
+                  backgroundColor: 'transparent',
                   color: 'white',
-                  border: '1px solid #444',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '14px',
+                  height: '30px',
+                  padding: '0',
+                  caretColor: 'white',
                 }}
               />
+              <style>
+                {`
+                  #Name::placeholder {
+                    color: #b3b3b3;
+                  }
+                `}
+              </style>
             </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label" style={{ color: '#b3b3b3' }}>
-                Email
-              </label>
+            <div
+              className="mb-3 d-flex align-items-center"
+              style={{
+                backgroundColor: '#2c2c2c',
+                borderRadius: '8px',
+                padding: '5px 10px',
+                border: '1px solid #444',
+              }}
+            >
+              <FaEnvelope style={{ color: '#b3b3b3', marginRight: '10px' }} />
               <input
                 type="email"
                 className="form-control"
                 id="email"
+                placeholder="Your Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 style={{
-                  backgroundColor: '#2c2c2c',
+                  backgroundColor: 'transparent',
                   color: 'white',
-                  border: '1px solid #444',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '14px',
+                  height: '30px',
+                  padding: '0',
+                  caretColor: 'white',
                 }}
               />
+              <style>
+                {`
+                  #email::placeholder {
+                    color: #b3b3b3;
+                  }
+                `}
+              </style>
             </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label" style={{ color: '#b3b3b3' }}>
-                Password
-              </label>
+            <div
+              className="mb-3 d-flex align-items-center"
+              style={{
+                backgroundColor: '#2c2c2c',
+                borderRadius: '8px',
+                padding: '5px 10px',
+                border: '1px solid #444',
+              }}
+            >
+              <FaLock style={{ color: '#b3b3b3', marginRight: '10px' }} />
               <input
                 type="password"
                 className="form-control"
                 id="password"
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 style={{
-                  backgroundColor: '#2c2c2c',
+                  backgroundColor: 'transparent',
                   color: 'white',
-                  border: '1px solid #444',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '14px',
+                  height: '30px',
+                  padding: '0',
+                  caretColor: 'white',
                 }}
               />
+              <style>
+                {`
+                  #password::placeholder {
+                    color: #b3b3b3;
+                  }
+                `}
+              </style>
             </div>
-            <div className="mb-3">
-              <label htmlFor="repeatPassword" className="form-label" style={{ color: '#b3b3b3' }}>
-                Repeat Password
-              </label>
+            <div
+              className="mb-3 d-flex align-items-center"
+              style={{
+                backgroundColor: '#2c2c2c',
+                borderRadius: '8px',
+                padding: '5px 10px',
+                border: '1px solid #444',
+              }}
+            >
+              <FaLock style={{ color: '#b3b3b3', marginRight: '10px' }} />
               <input
                 type="password"
                 className="form-control"
                 id="repeatPassword"
+                placeholder="Repeat Password"
                 value={RetypePassword}
                 onChange={(e) => setRetypePassword(e.target.value)}
                 required
                 style={{
-                  backgroundColor: '#2c2c2c',
+                  backgroundColor: 'transparent',
                   color: 'white',
-                  border: '1px solid #444',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '14px',
+                  height: '30px',
+                  padding: '0',
+                  caretColor: 'white',
                 }}
               />
+              <style>
+                {`
+                  #repeatPassword::placeholder {
+                    color: #b3b3b3;
+                  }
+                `}
+              </style>
             </div>
             <button
               type="submit"
