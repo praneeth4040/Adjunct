@@ -3,6 +3,15 @@ import Logo from '../assets/logo.webp';
 import './openingpage.css';
 
 function OpenPage() {
+  const handleTryForFree = () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      window.location.href = '/home';
+    } else {
+      window.location.href = '/signin';
+    }
+  };
+
   return (
     <div className="text-center text-white" style={{
       minHeight: '100vh',
@@ -28,7 +37,7 @@ function OpenPage() {
           borderRadius: '10px',
           padding: '12px 40px',
           border: 'none'
-        }} onClick={() => window.location.href = '/signin'}>
+        }} onClick={handleTryForFree}>
           Try for Free
         </button>
       </div>
@@ -56,8 +65,6 @@ function OpenPage() {
           <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
         </div>
       </div>
-
-      {/* Footer Section */}
       <footer style={{
         backgroundColor: '#171A1F',
         color: 'white',

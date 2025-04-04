@@ -56,9 +56,11 @@ function Navbar() {
             </li>
           ))}
         </ul>
-        <button className="btn btn-warning fw-bold d-flex align-items-center gap-2" onClick={() => window.location.href = '/signin'}>
-          <ArrowRight size={16} /> Get Started
-        </button>
+        {!isLoggedIn && (
+          <button className="btn btn-warning fw-bold d-flex align-items-center gap-2" onClick={() => window.location.href = '/signin'}>
+            <ArrowRight size={16} /> Get Started
+          </button>
+        )}
       </div>
     </nav>
   );
