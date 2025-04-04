@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
-import Logo from './vaibhav.webp';
+import Logo from '../assets/logo.webp';
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,9 +56,11 @@ function Navbar() {
             </li>
           ))}
         </ul>
-        <button className="btn btn-warning fw-bold d-flex align-items-center gap-2">
-          <ArrowRight size={16} /> Get Started
-        </button>
+        {!isLoggedIn && (
+          <button className="btn btn-warning fw-bold d-flex align-items-center gap-2" onClick={() => window.location.href = '/signin'}>
+            <ArrowRight size={16} /> Get Started
+          </button>
+        )}
       </div>
     </nav>
   );

@@ -59,18 +59,67 @@ function Profile() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "#000000",
+          color: "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   if (!user) {
-    return <div>No user data found. Please log in again.</div>;
+    return (
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundColor: "#000000",
+          color: "white",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        No user data found. Please log in again.
+      </div>
+    );
   }
 
   const profileImage = getProfileImage(user.email);
 
   return (
-    <div className="container mt-5 d-flex justify-content-center">
-      <div className="card text-center" style={{ width: "22rem", borderRadius: "20px" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "#0D1117",
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "20px",
+      }}
+    >
+      <div
+        className="card"
+        style={{
+          width: "24rem",
+          borderRadius: "15px",
+          backgroundColor: "#161B22",
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+          padding: "25px",
+          textAlign: "center",
+          transition: "transform 0.3s ease",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
         <div className="card-body">
           <div className="mb-4">
             <img
@@ -78,20 +127,69 @@ function Profile() {
               alt="Profile"
               className="rounded-circle"
               style={{
-                width: "100px",
-                height: "100px",
+                width: "120px",
+                height: "120px",
                 objectFit: "cover",
                 margin: "0 auto",
+                border: "4px solid #FFA500",
               }}
             />
           </div>
-          <h5 className="card-title mb-1">{user.name}</h5>
+          <h5
+            className="card-title mb-2"
+            style={{
+              color: "#FFA500",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+            }}
+          >
+            {user.name}
+          </h5>
           <div className="mb-4">
-            <h6 className="text-primary mb-1">User Email</h6>
-            <p className="text-muted">{user.email}</p>
+            <h6
+              className="text-primary mb-1"
+              style={{
+                color: "#FFA500",
+                fontSize: "1rem",
+                fontWeight: "600",
+              }}
+            >
+              User Email
+            </h6>
+            <p
+              style={{
+                color: "white",
+                fontSize: "0.9rem",
+                margin: "0",
+                wordBreak: "break-word",
+              }}
+            >
+              {user.email}
+            </p>
           </div>
           <div>
-            <button className="btn btn-info w-100" onClick={handleLogout}>
+            <button
+              className="btn"
+              style={{
+                backgroundColor: "#FFA500",
+                color: "white",
+                fontSize: "1rem",
+                fontWeight: "bold",
+                borderRadius: "12px",
+                padding: "12px 25px",
+                border: "none",
+                width: "100%",
+                cursor: "pointer",
+                transition: "background-color 0.3s ease",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "#FF8C00")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "#FFA500")
+              }
+              onClick={handleLogout}
+            >
               Logout
             </button>
           </div>

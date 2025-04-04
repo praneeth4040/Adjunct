@@ -1,11 +1,20 @@
 import React from 'react';
-import Logo  from './vaibhav.webp'
+import Logo from '../assets/logo.webp';
+import './openingpage.css';
 
 function OpenPage() {
+  const handleTryForFree = () => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      window.location.href = '/home';
+    } else {
+      window.location.href = '/signin';
+    }
+  };
+
   return (
     <div className="text-center text-white" style={{
       minHeight: '100vh',
-      
       backgroundColor: '#000000',
       display: 'flex',
       flexDirection: 'column',
@@ -13,19 +22,22 @@ function OpenPage() {
       alignItems: 'center',
       padding: '0 20px'
     }}>
-      <div className="container" style={{ marginBottom: '80px' , marginTop:'150px'}}>
-        <h1 style={{ fontSize: '3.5rem', marginBottom: '0.6rem' }}>Personalized AI for Your Needs</h1>
-        <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>Discover the perfect AI companion tailored to your requirements, whether for work or daily activities.</p>
+      <div className="container" style={{ marginBottom: '80px', marginTop: '150px' }}>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '0.6rem' }}>
+          Personalized AI for Your <span className="color-changing">Needs</span>
+        </h1>
+        <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
+          Discover the perfect AI companion tailored to your requirements, whether for work or daily activities.
+        </p>
         <button style={{
           backgroundColor: '#FFA500',
           color: 'white',
-         
           fontSize: '1.2rem',
           fontWeight: '1rem',
           borderRadius: '10px',
           padding: '12px 40px',
           border: 'none'
-        }}>
+        }} onClick={handleTryForFree}>
           Try for Free
         </button>
       </div>
@@ -53,8 +65,6 @@ function OpenPage() {
           <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
         </div>
       </div>
-
-      {/* Footer Section */}
       <footer style={{
         backgroundColor: '#171A1F',
         color: 'white',
