@@ -89,6 +89,7 @@ function Signin() {
                   height: '30px',
                   padding: '0',
                   caretColor: 'white',
+                  borderRadius: "0px",
                 }}
               />
               <style>
@@ -126,6 +127,7 @@ function Signin() {
                   height: '30px',
                   padding: '0',
                   caretColor: 'white',
+                  borderRadius: "0px",
                 }}
               />
               <style>
@@ -163,6 +165,7 @@ function Signin() {
                   height: '30px',
                   padding: '0',
                   caretColor: 'white',
+                  borderRadius: "0px",
                 }}
               />
               <style>
@@ -200,6 +203,8 @@ function Signin() {
                   height: '30px',
                   padding: '0',
                   caretColor: 'white',
+                  borderRadius: "0px",
+                  
                 }}
               />
               <style>

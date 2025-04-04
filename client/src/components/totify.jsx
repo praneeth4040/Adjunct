@@ -10,6 +10,10 @@ export const showToast = (type, message, options = {}) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
+    style: {
+      backgroundColor: "#161B22", // Default background color
+      color: "#fff", // Default text color
+    },
   };
 
   const config = { ...defaultOptions, ...options };
