@@ -1,0 +1,12 @@
+
+@keyframes colorChange {
+  0% { color: blue; }
+  25% { color: yellowgreen; }
+  50% { color: green; }
+  75% { color: orange; }
+  100% { color: blue; }
+}
+
+.color-changing {
+  animation: colorChange 5s infinite;
+}
