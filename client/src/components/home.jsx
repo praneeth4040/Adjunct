@@ -55,9 +55,10 @@ function Home() {
       const response = await axios.post(
         'http://localhost:3000/askAi',
         { userPrompt },
-        { headers: { Authorization: `Bearer ${token}` } ,
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
         }
       );
 
@@ -67,7 +68,6 @@ function Home() {
         const { subject, receiptentEmailId: recipient, body } = jsonGeneratedResponse;
 
         setEmailData({ subject, recipient, body });
-        setSendButton(true);
 
         setChatMessages([
           ...newChatMessages,
@@ -76,15 +76,15 @@ function Home() {
             type: 'ai',
             content: `Recipient: ${recipient}\nSubject: ${subject}\nBody: ${body}`,
             isEditable: true,
+            showSendButton: true, // Add this property
           },
         ]);
       } else {
         const generatedContent = jsonGeneratedResponse.generatedResponse;
-        setSendButton(false);
 
         setChatMessages([
           ...newChatMessages,
-          { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false },
+          { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false, showSendButton: false },
         ]);
       }
     } catch (error) {
@@ -146,7 +146,15 @@ function Home() {
   };
 
   return (
-    <div className="d-flex flex-column justify-content-between" style={{ height: '100vh', position: 'relative' }}>
+    <div
+      className="d-flex flex-column justify-content-between"
+      style={{
+        height: '100vh',
+        position: 'relative',
+        backgroundColor: '#000', // Set the background color to black
+        color: '#fff', // Optional: Set text color to white for better contrast
+      }}
+    >
       {/* Welcome message */}
       {!hasInteracted && (
         <div
@@ -159,7 +167,7 @@ function Home() {
             textAlign: 'center',
           }}
         >
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#28a745', marginBottom: '10px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#ff8c00', marginBottom: '10px' }}>
             Welcome, {name}!
           </h1>
           <h4 style={{ fontSize: '20px', color: '#007bff' }}>Give permission to get access to your PA</h4>
@@ -185,7 +193,7 @@ function Home() {
               key={message.id}
               className={`mb-3 ${message.type === 'user' ? 'text-left' : 'text-right'}`}
               style={{
-                backgroundColor: message.type === 'user' ? '#d1e7dd' : '#f1f1f1',
+                backgroundColor: message.type === 'user' ? '#ffe5b4' : '#d3d3d3', // Light orange for user, grey for AI
                 borderRadius: '10px',
                 padding: '10px',
                 maxWidth: '80%',
@@ -205,7 +213,7 @@ function Home() {
                 <span>{message.content}</span>
               )}
 
-              {message.type === 'ai' && sendButton && (
+              {message.type === 'ai' && message.showSendButton && (
                 <div className="mt-2">
                   <button className="btn btn-success btn-sm" onClick={handleSend}>
                     Send
@@ -218,7 +226,7 @@ function Home() {
           {/* Loading Indicator */}
           {loading && (
             <div className="text-center my-3">
-              <Slab color="#32cd32" size="medium" text="ON YOUR WORK SIR" textColor="" />
+              <Slab color="#ff8c00" size="medium" text="ON YOUR WORK SIR" textColor="" />
             </div>
           )}
         </div>
