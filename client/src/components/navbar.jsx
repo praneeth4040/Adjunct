@@ -13,7 +13,9 @@ function Navbar() {
         { path: "/profile", label: "Profile" },
         { path: "/home", label: "Home" },
         { path: "/about", label: "About" },
-        { path: "/blogs", label: "Permissions" }
+        { path: "/blogs", label: "Permissions" },
+        {path:"/terms",label:"Terms and conditions"}
+
       ]
     : [
         { path: "/login", label: "Login" },
