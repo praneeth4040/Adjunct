@@ -16,8 +16,10 @@ import {gapi} from "gapi-script"
 import { useEffect } from 'react';
 import About from './components/aboutas';
 import Blogs from './components/blogs';
+import TermsAndConditions from './components/terms'
 import Check from './components/check';
 import Verifypage from './components/verifypage';
+import PrivacyPolicy from './components/privacy';
 
 
 function App() {
@@ -40,6 +42,15 @@ function App() {
         <>
           <Navbar />
           <LoginPage />
+        </>
+      ),
+    },
+    {
+      path: '/privacy',
+      element: (
+        <>
+        
+          <PrivacyPolicy/>
         </>
       ),
     },
@@ -70,6 +81,16 @@ function App() {
         </PrivateRoute>
       ),
     },
+    {
+      path: '/terms',
+      element: (
+       
+          
+          <TermsAndConditions />
+       
+      ),
+    },
+
     {
       path: '/signin',
       element: (
