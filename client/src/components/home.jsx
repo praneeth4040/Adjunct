@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Slab } from 'react-loading-indicators'; // Import the loading indicator
+import { Slab } from 'react-loading-indicators';
 
 function Home() {
   const location = useLocation();
@@ -9,11 +9,9 @@ function Home() {
   const [userPrompt, setUserPrompt] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [sendButton, setSendButton] = useState(false);
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
-
-  const [emailData, setEmailData] = useState({ subject: '', recipient: '', body: '' }); // Email state
+  const [emailData, setEmailData] = useState({ subject: '', recipient: '', body: '' });
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -41,12 +39,13 @@ function Home() {
     if (!userPrompt.trim()) return;
 
     setHasInteracted(true);
+    const promptText = userPrompt;
     setUserPrompt('');
     setLoading(true);
 
     const newChatMessages = [
       ...chatMessages,
-      { id: Date.now(), type: 'user', content: userPrompt, isEditable: false },
+      { id: Date.now(), type: 'user', content: promptText, isEditable: false },
     ];
     setChatMessages(newChatMessages);
 
@@ -54,10 +53,11 @@ function Home() {
       const token = localStorage.getItem('authToken');
       const response = await axios.post(
         'http://localhost:3000/askAi',
-        { userPrompt },
-        { headers: { Authorization: `Bearer ${token}` } ,
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
+        { userPrompt: promptText },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
         }
       );
 
@@ -65,9 +65,7 @@ function Home() {
 
       if (jsonGeneratedResponse.emailAPI === true || jsonGeneratedResponse.emailApi === true) {
         const { subject, receiptentEmailId: recipient, body } = jsonGeneratedResponse;
-
         setEmailData({ subject, recipient, body });
-        setSendButton(true);
 
         setChatMessages([
           ...newChatMessages,
@@ -76,22 +74,33 @@ function Home() {
             type: 'ai',
             content: `Recipient: ${recipient}\nSubject: ${subject}\nBody: ${body}`,
             isEditable: true,
+            showSendButton: true,
           },
         ]);
       } else {
         const generatedContent = jsonGeneratedResponse.generatedResponse;
-        setSendButton(false);
 
         setChatMessages([
           ...newChatMessages,
-          { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false },
+          {
+            id: Date.now(),
+            type: 'ai',
+            content: generatedContent,
+            isEditable: false,
+            showSendButton: false,
+          },
         ]);
       }
     } catch (error) {
       console.error('Error generating message:', error);
       setChatMessages([
         ...newChatMessages,
-        { id: Date.now(), type: 'ai', content: 'An error occurred. Please try again.', isEditable: false },
+        {
+          id: Date.now(),
+          type: 'ai',
+          content: 'An error occurred. Please try again.',
+          isEditable: false,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -112,7 +121,12 @@ function Home() {
     if (!subject || !recipient || !body) {
       setChatMessages([
         ...chatMessages,
-        { id: Date.now(), type: 'error', content: 'Email data is incomplete. Cannot send email.', isEditable: false },
+        {
+          id: Date.now(),
+          type: 'error',
+          content: 'Email data is incomplete. Cannot send email.',
+          isEditable: false,
+        },
       ]);
       return;
     }
@@ -128,121 +142,205 @@ function Home() {
       if (response.status === 200) {
         setChatMessages([
           ...chatMessages,
-          { id: Date.now(), type: 'info', content: 'Email sent successfully!', isEditable: false },
+          {
+            id: Date.now(),
+            type: 'info',
+            content: 'Email sent successfully!',
+            isEditable: false,
+          },
         ]);
       } else {
         setChatMessages([
           ...chatMessages,
-          { id: Date.now(), type: 'error', content: 'Email sending failed. Please try again.', isEditable: false },
+          {
+            id: Date.now(),
+            type: 'error',
+            content: 'Email sending failed. Please try again.',
+            isEditable: false,
+          },
         ]);
       }
     } catch (error) {
       console.error('Error sending email:', error);
       setChatMessages([
         ...chatMessages,
-        { id: Date.now(), type: 'error', content: 'An error occurred while sending the email.', isEditable: false },
+        {
+          id: Date.now(),
+          type: 'error',
+          content: 'An error occurred while sending the email.',
+          isEditable: false,
+        },
       ]);
     }
   };
 
   return (
-    <div className="d-flex flex-column justify-content-between" style={{ height: '100vh', position: 'relative' }}>
-      {/* Welcome message */}
-      {!hasInteracted && (
-        <div
-          className="d-flex flex-column align-items-center"
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            textAlign: 'center',
-          }}
-        >
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#28a745', marginBottom: '10px' }}>
-            Welcome, {name}!
-          </h1>
-          <h4 style={{ fontSize: '20px', color: '#007bff' }}>Give permission to get access to your PA</h4>
-        </div>
-      )}
+    <>
+      {/* 👇 GLOBAL PLACEHOLDER STYLE FIX */}
+      <style>
+        {`
+          input::placeholder {
+            color: #ffffff !important;
+            opacity: 0.7;
+          }
+        `}
+      </style>
 
-      {/* Chat section */}
-      {hasInteracted && (
-        <div
-          ref={chatContainerRef}
-          className="container"
-          style={{
-            maxHeight: '80vh',
-            overflowY: 'auto',
-            marginBottom: '80px',
-            padding: '10px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {chatMessages.map((message) => (
+      <div
+        className="d-flex flex-column"
+        style={{
+          height: '100vh',
+          backgroundColor: '#000',
+          color: '#fff',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Before Interaction: Centered Welcome & Input */}
+        {!hasInteracted && (
+          <div
+            className="d-flex flex-column justify-content-center align-items-center"
+            style={{ flex: 1, padding: '20px' }}
+          >
+            <h1 style={{ color: '#ff9900' }}>Welcome, {name}!</h1>
+            <h5 style={{ color: '#007bff', marginBottom: '20px' }}>Give permission to access your PA</h5>
+            <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '600px' }}>
+              <div className="input-group border rounded overflow-hidden">
+                <input
+                  type="text"
+                  className="form-control border-0"
+                  placeholder="Type your message here..."
+                  value={userPrompt}
+                  onChange={(e) => setUserPrompt(e.target.value)}
+                  required
+                  style={{
+                    backgroundColor: '#2c2c2c',
+                    color: '#fff',
+                    padding: '10px',
+                    borderRadius: '5px 0 0 5px',
+                    border: '1px solid #444',
+                  }}
+                />
+                <button
+                  className="btn"
+                  type="submit"
+                  style={{
+                    backgroundColor: '#ff9900',
+                    color: '#fff',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '0 5px 5px 0',
+                  }}
+                >
+                  Generate
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Chat UI after interaction */}
+        {hasInteracted && (
+          <>
             <div
-              key={message.id}
-              className={`mb-3 ${message.type === 'user' ? 'text-left' : 'text-right'}`}
+              ref={chatContainerRef}
               style={{
-                backgroundColor: message.type === 'user' ? '#d1e7dd' : '#f1f1f1',
-                borderRadius: '10px',
-                padding: '10px',
-                maxWidth: '80%',
-                margin: '5px 0',
-                wordWrap: 'break-word',
-                whiteSpace: 'pre-wrap',
-                position: 'relative',
+                flex: 1,
+                overflowY: 'auto',
+                padding: '20px',
+                paddingBottom: '120px',
               }}
             >
-              {message.isEditable ? (
-                <textarea
-                  className="form-control"
-                  defaultValue={message.content}
-                  onBlur={(e) => handleSave(message.id, e.target.value)}
-                />
-              ) : (
-                <span>{message.content}</span>
-              )}
+              {chatMessages.map((message) => (
+                <div
+                  key={message.id}
+                  style={{
+                    backgroundColor: message.type === 'user' ? '#ff9900' : '#444',
+                    color: '#fff',
+                    borderRadius: '10px',
+                    padding: '10px',
+                    marginBottom: '10px',
+                    maxWidth: '80%',
+                    wordWrap: 'break-word',
+                    whiteSpace: 'pre-wrap',
+                    alignSelf: message.type === 'user' ? 'flex-end' : 'flex-start',
+                  }}
+                >
+                  {message.isEditable ? (
+                    <textarea
+                      className="form-control"
+                      defaultValue={message.content}
+                      onBlur={(e) => handleSave(message.id, e.target.value)}
+                    />
+                  ) : (
+                    <span>{message.content}</span>
+                  )}
 
-              {message.type === 'ai' && sendButton && (
-                <div className="mt-2">
-                  <button className="btn btn-success btn-sm" onClick={handleSend}>
-                    Send
-                  </button>
+                  {message.type === 'ai' && message.showSendButton && (
+                    <div className="mt-2">
+                      <button className="btn btn-success btn-sm" onClick={handleSend}>
+                        Send
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {loading && (
+                <div className="text-center my-3">
+                  <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
                 </div>
               )}
             </div>
-          ))}
 
-          {/* Loading Indicator */}
-          {loading && (
-            <div className="text-center my-3">
-              <Slab color="#32cd32" size="medium" text="ON YOUR WORK SIR" textColor="" />
+            {/* Bottom Input Box */}
+            <div
+              style={{
+                position: 'fixed',
+                bottom: 0,
+                width: '100%',
+                backgroundColor: '#000',
+                padding: '15px 0',
+                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.5)',
+                zIndex: 1000,
+              }}
+            >
+              <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: '0 auto' }}>
+                <div className="input-group border rounded overflow-hidden">
+                  <input
+                    type="text"
+                    className="form-control border-0"
+                    placeholder="Type your message here..."
+                    value={userPrompt}
+                    onChange={(e) => setUserPrompt(e.target.value)}
+                    required
+                    style={{
+                      backgroundColor: '#2c2c2c',
+                      color: '#fff',
+                      padding: '10px',
+                      borderRadius: '5px 0 0 5px',
+                      border: '1px solid #444',
+                      textAlign: hasInteracted ? 'left' : 'center',
+                    }}
+                  />
+                  <button
+                    className="btn"
+                    type="submit"
+                    style={{
+                      backgroundColor: '#ff8c00',
+                      color: '#fff',
+                      border: 'none',
+                      padding: '10px 20px',
+                      borderRadius: '0 5px 5px 0',
+                    }}
+                  >
+                    Generate
+                  </button>
+                </div>
+              </form>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* Footer */}
-      <footer className="bg-light py-3 text-center" style={{ position: 'absolute', bottom: '0', width: '100%' }}>
-        <form onSubmit={handleSubmit}>
-          <div className="input-group rounded border p-2" style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <input
-              type="text"
-              className="form-control border-0"
-              placeholder="Type your message..."
-              value={userPrompt}
-              onChange={(e) => setUserPrompt(e.target.value)}
-              required
-            />
-            <button className="btn btn-success" type="submit">
-              Generate
-            </button>
-          </div>
-        </form>
-      </footer>
-    </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 
