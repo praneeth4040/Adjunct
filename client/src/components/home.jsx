@@ -53,7 +53,11 @@ function Home() {
       const token = localStorage.getItem('authToken');
       const response = await axios.post(
         'http://localhost:3000/askAi',
+<
         { userPrompt: promptText },
+=======
+        { userPrompt },
+
         {
           headers: { Authorization: `Bearer ${token}` },
           maxContentLength: Infinity,
@@ -74,7 +78,11 @@ function Home() {
             type: 'ai',
             content: `Recipient: ${recipient}\nSubject: ${subject}\nBody: ${body}`,
             isEditable: true,
+
             showSendButton: true,
+
+            showSendButton: true, // Add this property
+
           },
         ]);
       } else {
@@ -82,6 +90,7 @@ function Home() {
 
         setChatMessages([
           ...newChatMessages,
+
           {
             id: Date.now(),
             type: 'ai',
@@ -89,6 +98,9 @@ function Home() {
             isEditable: false,
             showSendButton: false,
           },
+=======
+          { id: Date.now(), type: 'ai', content: generatedContent, isEditable: false, showSendButton: false },
+
         ]);
       }
     } catch (error) {
@@ -175,6 +187,7 @@ function Home() {
   };
 
   return (
+
     <>
       {/* 👇 GLOBAL PLACEHOLDER STYLE FIX */}
       <style>
@@ -241,13 +254,69 @@ function Home() {
         {/* Chat UI after interaction */}
         {hasInteracted && (
           <>
+=======
+    <div
+      className="d-flex flex-column justify-content-between"
+      style={{
+        height: '100vh',
+        position: 'relative',
+        backgroundColor: '#000', // Set the background color to black
+        color: '#fff', // Optional: Set text color to white for better contrast
+      }}
+    >
+      {/* Welcome message */}
+      {!hasInteracted && (
+        <div
+          className="d-flex flex-column align-items-center"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+          }}
+        >
+          <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#ff8c00', marginBottom: '10px' }}>
+            Welcome, {name}!
+          </h1>
+          <h4 style={{ fontSize: '20px', color: '#007bff' }}>Give permission to get access to your PA</h4>
+        </div>
+      )}
+
+      {/* Chat section */}
+      {hasInteracted && (
+        <div
+          ref={chatContainerRef}
+          className="container"
+          style={{
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            marginBottom: '80px',
+            padding: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {chatMessages.map((message) => (
+
             <div
               ref={chatContainerRef}
               style={{
+
                 flex: 1,
                 overflowY: 'auto',
                 padding: '20px',
                 paddingBottom: '120px',
+
+                backgroundColor: message.type === 'user' ? '#ffe5b4' : '#d3d3d3', // Light orange for user, grey for AI
+                borderRadius: '10px',
+                padding: '10px',
+                maxWidth: '80%',
+                margin: '5px 0',
+                wordWrap: 'break-word',
+                whiteSpace: 'pre-wrap',
+                position: 'relative',
+
               }}
             >
               {chatMessages.map((message) => (
@@ -275,6 +344,7 @@ function Home() {
                     <span>{message.content}</span>
                   )}
 
+
                   {message.type === 'ai' && message.showSendButton && (
                     <div className="mt-2">
                       <button className="btn btn-success btn-sm" onClick={handleSend}>
@@ -287,9 +357,17 @@ function Home() {
               {loading && (
                 <div className="text-center my-3">
                   <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
+
+              {message.type === 'ai' && message.showSendButton && (
+                <div className="mt-2">
+                  <button className="btn btn-success btn-sm" onClick={handleSend}>
+                    Send
+                  </button>
+
                 </div>
               )}
             </div>
+
 
             {/* Bottom Input Box */}
             <div
@@ -336,6 +414,12 @@ function Home() {
                   </button>
                 </div>
               </form>
+
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="text-center my-3">
+              <Slab color="#ff8c00" size="medium" text="ON YOUR WORK SIR" textColor="" />
+
             </div>
           </>
         )}

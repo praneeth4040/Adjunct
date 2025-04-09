@@ -1,6 +1,7 @@
 import React from 'react';
 import Logo from '../assets/logo.webp';
 import './openingpage.css';
+import Footer from './footer';
 
 function OpenPage() {
   const handleTryForFree = () => {
@@ -65,6 +66,7 @@ function OpenPage() {
           <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
         </div>
       </div>
+      {/*
       <footer style={{
         backgroundColor: '#171A1F',
         color: 'white',
@@ -110,6 +112,8 @@ function OpenPage() {
           <i className="bi bi-youtube" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
         </div>
       </footer>
+      */}
+      <Footer />
     </div>
   );
 }
