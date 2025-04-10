@@ -1,8 +1,9 @@
 import React from 'react';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
 
 function Blogs() {
     const handleSubmitGoogle = () => {
-        window.location.href = 'http://localhost:3000/auth/google';
+        window.location.href = `${axiosInstance.defaults.baseURL}/auth/google`; // Use the base URL from axiosInstance
     };
 
     return (

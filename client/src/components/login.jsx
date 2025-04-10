@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../axiosConfig"; // Import the Axios instance
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "./totify";
 import { FaEnvelope, FaLock } from "react-icons/fa";
@@ -13,7 +13,7 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/login", { email, password });
+      const response = await axiosInstance.post("/login", { email, password }); // Use axiosInstance
       const val = response.data.value;
       const userName = response.data.name;
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const OTPVerification = () => {
     const navigate = useNavigate();
@@ -12,63 +11,67 @@ const OTPVerification = () => {
 
     const handleResend = async () => {
         setOtp(''); // Clear the input value
-        const resendResponse = await axios.post("http://localhost:3000/signup/resend-otp", { email });
-        const val = resendResponse.data.value;
-        if (val === 4) {
-            setMessage(`A new OTP has been sent to ${email}`);
-        }
-        switch (val) {
-            case 1:
-                console.log("Email is required");
-                break;
-            case 2:
-                console.log("user not found");
-                break;
-            case 3:
-                console.log("User is already verified");
-                break;
-            case 4:
-                console.log("New OTP sent to your email");
-                break;
-            case 5:
-                console.log("internal server error");
-                break;
-            default:
-                console.log("unknown error");
-                break;
+        try {
+            const resendResponse = await axiosInstance.post('/signup/resend-otp', { email }); // Use axiosInstance
+            const val = resendResponse.data.value;
+            if (val === 4) {
+                setMessage(`A new OTP has been sent to ${email}`);
+            }
+            switch (val) {
+                case 1:
+                    console.log("Email is required");
+                    break;
+                case 2:
+                    console.log("User not found");
+                    break;
+                case 3:
+                    console.log("User is already verified");
+                    break;
+                case 4:
+                    console.log("New OTP sent to your email");
+                    break;
+                case 5:
+                    console.log("Internal server error");
+                    break;
+                default:
+                    console.log("Unknown error");
+                    break;
+            }
+        } catch (err) {
+            console.log('Error:', err);
         }
     };
 
     const handleVerify = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/signup/verify-otp", { email, otp });
+            const response = await axiosInstance.post('/signup/verify-otp', { email, otp }); // Use axiosInstance
             const val = response.data.value;
             const userName = response.data.name;
             switch (val) {
                 case 1:
-                    console.log("otp is required");
+                    console.log("OTP is required");
                     break;
                 case 2:
-                    console.log("user not found");
+                    console.log("User not found");
                     break;
                 case 3:
-                    console.log("invalid or expired otp");
+                    console.log("Invalid or expired OTP");
                     break;
                 case 4:
-                    console.log("account verified successfully", response.data.token, userName);
+                    console.log("Account verified successfully", response.data.token, userName);
                     localStorage.setItem('authToken', response.data.token);
                     navigate("/home", { state: { userName } });
                     break;
                 case 5:
-                    console.log("internal server error");
+                    console.log("Internal server error");
                     break;
                 default:
-                    console.log("unknown error");
+                    console.log("Unknown error");
                     break;
             }
         } catch (err) {
-            console.log('error :', err);
+            console.log('Error:', err);
         }
     };
 
