@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "./totify";
-import axios from "axios";
+import axiosInstance from "../axiosConfig"; // Import the Axios instance
 
 function Profile() {
   const navigate = useNavigate();
@@ -23,8 +23,8 @@ function Profile() {
     // Fetch user data using the token
     const fetchUserData = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/getData",
+        const response = await axiosInstance.post(
+          "/getData",
           {},
           {
             headers: { Authorization: `Bearer ${token}` },

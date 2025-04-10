@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
 import { Slab } from 'react-loading-indicators';
 
 function Home() {
@@ -51,8 +51,8 @@ function Home() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post(
-        'http://localhost:3000/askAi',
+      const response = await axiosInstance.post(
+        '/askAi',
         { userPrompt },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -133,8 +133,8 @@ function Home() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post(
-        'http://localhost:3000/sendemail',
+      const response = await axiosInstance.post(
+        '/sendemail',
         { subject, recipient, body },
         { headers: { Authorization: `Bearer ${token}` } }
       );

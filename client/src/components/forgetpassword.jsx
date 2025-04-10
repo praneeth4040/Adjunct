@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axiosInstance from "../axiosConfig"; // Import the Axios instance
 import "./forgotpassword.css"; // Add your custom CSS for additional styles
 
 const ForgotPassword = () => {
@@ -12,10 +12,7 @@ const ForgotPassword = () => {
   const handleEmailSubmit = async () => {
     if (email) {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/login/forgot-password",
-          { email }
-        );
+        const response = await axiosInstance.post("/login/forgot-password", { email });
         const val = response.data.value;
         switch (val) {
           case 0:
@@ -43,10 +40,7 @@ const ForgotPassword = () => {
 
   const handleOtpVerification = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/login/fp-otp-verification",
-        { email, otp }
-      );
+      const response = await axiosInstance.post("/login/fp-otp-verification", { email, otp });
       const val = response.data.val;
       switch (val) {
         case 0:
@@ -74,10 +68,7 @@ const ForgotPassword = () => {
   const handlePasswordReset = async () => {
     if (newPassword === confirmPassword) {
       try {
-        const response = await axios.post(
-          "http://localhost:3000/login/resetpassword",
-          { email, newPassword }
-        );
+        const response = await axiosInstance.post("/login/resetpassword", { email, newPassword });
         const val = response.data.val;
         switch (val) {
           case 0:
@@ -115,10 +106,7 @@ const ForgotPassword = () => {
               required
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button
-              className="btn btn-primary w-100"
-              onClick={handleEmailSubmit}
-            >
+            <button className="btn btn-primary w-100" onClick={handleEmailSubmit}>
               Send OTP
             </button>
           </div>
@@ -131,10 +119,7 @@ const ForgotPassword = () => {
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
             />
-            <button
-              className="btn btn-primary w-100"
-              onClick={handleOtpVerification}
-            >
+            <button className="btn btn-primary w-100" onClick={handleOtpVerification}>
               Verify OTP
             </button>
           </div>
@@ -154,10 +139,7 @@ const ForgotPassword = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <button
-              className="btn btn-primary w-100"
-              onClick={handlePasswordReset}
-            >
+            <button className="btn btn-primary w-100" onClick={handlePasswordReset}>
               Reset Password
             </button>
           </div>
