@@ -1,15 +1,18 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Logo from '../assets/logo.webp';
 import './openingpage.css';
 import Footer from './footer';
 
 function OpenPage() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const handleTryForFree = () => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      window.location.href = '/home';
+      navigate('/home'); // Navigate to /home
     } else {
-      window.location.href = '/signin';
+      navigate('/signin'); // Navigate to /signin
     }
   };
 
@@ -66,7 +69,7 @@ function OpenPage() {
           <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
         </div>
       </div>
-      {/*
+      {/* 
       <footer style={{
         backgroundColor: '#171A1F',
         color: 'white',
