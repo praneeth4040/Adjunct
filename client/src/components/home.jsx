@@ -268,14 +268,26 @@ function Home() {
         )}
 
         {hasInteracted && (
-          <>
+          <div
+            className="d-flex flex-column justify-content-between"
+            style={{
+              height: '100vh',
+              position: 'relative',
+              backgroundColor: '#000', 
+              color: '#fff', 
+            }}
+          >
+            {/* Chat section */}
             <div
               ref={chatContainerRef}
+              className="container"
               style={{
-                flex: 1,
+                maxHeight: '80vh',
                 overflowY: 'auto',
-                padding: '20px',
-                paddingBottom: '120px',
+                marginBottom: '80px',
+                padding: '10px',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               {chatMessages.map((message) => (
@@ -319,6 +331,7 @@ function Home() {
               )}
             </div>
 
+            {/* Bottom Input Box */}
             <div
               style={{
                 position: 'fixed',
@@ -345,7 +358,6 @@ function Home() {
                       padding: '10px',
                       borderRadius: '5px 0 0 5px',
                       border: '1px solid #444',
-                      textAlign: hasInteracted ? 'left' : 'center',
                     }}
                   />
                   <button
@@ -364,7 +376,7 @@ function Home() {
                 </div>
               </form>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>

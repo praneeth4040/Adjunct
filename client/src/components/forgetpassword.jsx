@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./home.css"; // Add your custom CSS for additional styles
+import "./forgotpassword.css"; // Add your custom CSS for additional styles
 
 const ForgotPassword = () => {
   const [step, setStep] = useState("email");
