@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
 import { Slab } from 'react-loading-indicators';
 
 function Home() {
@@ -80,9 +80,14 @@ function Home() {
 
     try {
       const token = localStorage.getItem('authToken');
+
       const response = await axios.post(
         'http://localhost:3000/askAi',
         { userPrompt: promptText },
+const response = await axiosInstance.post(
+        '/askAi',
+        { userPrompt },
+
         {
           headers: { Authorization: `Bearer ${token}` },
           maxContentLength: Infinity,
@@ -162,8 +167,8 @@ function Home() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.post(
-        'http://localhost:3000/sendemail',
+      const response = await axiosInstance.post(
+        '/sendemail',
         { subject, recipient, body },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -273,11 +278,18 @@ function Home() {
             style={{
               height: '100vh',
               position: 'relative',
+
               backgroundColor: '#000', 
               color: '#fff', 
             }}
           >
             {/* Chat section */}
+
+              backgroundColor: '#000',
+              color: '#fff',
+            }}
+          >
+
             <div
               ref={chatContainerRef}
               className="container"
@@ -324,6 +336,7 @@ function Home() {
                   )}
                 </div>
               ))}
+
               {loading && (
                 <div className="text-center my-3">
                   <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
@@ -332,6 +345,16 @@ function Home() {
             </div>
 
             {/* Bottom Input Box */}
+
+            </div>
+
+            {loading && (
+              <div className="text-center my-3">
+                <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
+              </div>
+            )}
+
+
             <div
               style={{
                 position: 'fixed',
@@ -364,7 +387,7 @@ function Home() {
                     className="btn"
                     type="submit"
                     style={{
-                      backgroundColor: '#ff8c00',
+                      backgroundColor: '#ff9900',
                       color: '#fff',
                       border: 'none',
                       padding: '10px 20px',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
 
 const Check = () => {
   const [user, setUser] = useState(null);
@@ -7,7 +7,7 @@ const Check = () => {
 
   useEffect(() => {
     // Fetch user data after successful authentication
-    axios.get('http://localhost:3000/auth/user')
+    axiosInstance.get('/auth/user') // Use axiosInstance with the base URL
       .then((response) => {
         setUser(response.data);
       })

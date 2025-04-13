@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosConfig'; // Import the Axios instance
 import { useNavigate } from 'react-router-dom';
 import { showToast } from './totify';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
@@ -14,7 +14,7 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/signup", {
+      const response = await axiosInstance.post("/signup", {
         name,
         email,
         password,
@@ -204,7 +204,6 @@ function Signin() {
                   padding: '0',
                   caretColor: 'white',
                   borderRadius: "0px",
-                  
                 }}
               />
               <style>
