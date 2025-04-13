@@ -7,12 +7,20 @@ function Home() {
   const location = useLocation();
   const [name, setName] = useState(localStorage.getItem('userName') || 'Guest');
   const [userPrompt, setUserPrompt] = useState('');
-  const [chatMessages, setChatMessages] = useState([]);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [chatMessages, setChatMessages] = useState(
+    JSON.parse(localStorage.getItem('chatMessages')) || []
+  );
+  const [hasInteracted, setHasInteracted] = useState(chatMessages.length > 0);
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
   const [emailData, setEmailData] = useState({ subject: '', recipient: '', body: '' });
 
+  // Persist chat messages
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(chatMessages));
+  }, [chatMessages]);
+
+  // Set user from location or token
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     const userNameFromLocation = location.state?.userName;
@@ -28,11 +36,32 @@ function Home() {
     };
   }, [location.state?.userName]);
 
+  // Scroll to bottom on new message
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [chatMessages]);
+
+  // Watch for authToken removal
+  useEffect(() => {
+    const handleAuthTokenChange = () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        localStorage.removeItem('chatMessages');
+        setChatMessages([]);
+        setHasInteracted(false);
+      }
+    };
+
+    window.addEventListener('focus', handleAuthTokenChange);
+    const interval = setInterval(handleAuthTokenChange, 5000);
+
+    return () => {
+      window.removeEventListener('focus', handleAuthTokenChange);
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,9 +80,14 @@ function Home() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axiosInstance.post(
+
+      const response = await axios.post(
+        'http://localhost:3000/askAi',
+        { userPrompt: promptText },
+const response = await axiosInstance.post(
         '/askAi',
         { userPrompt },
+
         {
           headers: { Authorization: `Bearer ${token}` },
           maxContentLength: Infinity,
@@ -200,7 +234,9 @@ function Home() {
             style={{ flex: 1, padding: '20px' }}
           >
             <h1 style={{ color: '#ff9900' }}>Welcome, {name}!</h1>
-            <h5 style={{ color: '#007bff', marginBottom: '20px' }}>Give permission to access your PA</h5>
+            <h5 style={{ color: '#007bff', marginBottom: '20px' }}>
+              Give permission to access your PA
+            </h5>
             <form onSubmit={handleSubmit} style={{ width: '100%', maxWidth: '600px' }}>
               <div className="input-group border rounded overflow-hidden">
                 <input
@@ -242,10 +278,18 @@ function Home() {
             style={{
               height: '100vh',
               position: 'relative',
+
+              backgroundColor: '#000', 
+              color: '#fff', 
+            }}
+          >
+            {/* Chat section */}
+
               backgroundColor: '#000',
               color: '#fff',
             }}
           >
+
             <div
               ref={chatContainerRef}
               className="container"
@@ -292,6 +336,16 @@ function Home() {
                   )}
                 </div>
               ))}
+
+              {loading && (
+                <div className="text-center my-3">
+                  <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Input Box */}
+
             </div>
 
             {loading && (
@@ -299,6 +353,7 @@ function Home() {
                 <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
               </div>
             )}
+
 
             <div
               style={{
