@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import axiosInstance from '../axiosConfig'; // Import the Axios instance
+import axiosInstance from '../axiosConfig';
 import { Slab } from 'react-loading-indicators';
 
 function Home() {
@@ -81,13 +81,9 @@ function Home() {
     try {
       const token = localStorage.getItem('authToken');
 
-      const response = await axios.post(
-        'http://localhost:3000/askAi',
-        { userPrompt: promptText },
-const response = await axiosInstance.post(
+      const response = await axiosInstance.post(
         '/askAi',
-        { userPrompt },
-
+        { userPrompt: promptText },
         {
           headers: { Authorization: `Bearer ${token}` },
           maxContentLength: Infinity,
@@ -97,7 +93,7 @@ const response = await axiosInstance.post(
 
       const jsonGeneratedResponse = response.data.generatedPrompt;
 
-      if (jsonGeneratedResponse.emailAPI === true || jsonGeneratedResponse.emailApi === true) {
+      if (jsonGeneratedResponse.emailAPI === true) {
         const { subject, receiptentEmailId: recipient, body } = jsonGeneratedResponse;
         setEmailData({ subject, recipient, body });
 
@@ -278,18 +274,10 @@ const response = await axiosInstance.post(
             style={{
               height: '100vh',
               position: 'relative',
-
-              backgroundColor: '#000', 
-              color: '#fff', 
-            }}
-          >
-            {/* Chat section */}
-
               backgroundColor: '#000',
               color: '#fff',
             }}
           >
-
             <div
               ref={chatContainerRef}
               className="container"
@@ -343,17 +331,6 @@ const response = await axiosInstance.post(
                 </div>
               )}
             </div>
-
-            {/* Bottom Input Box */}
-
-            </div>
-
-            {loading && (
-              <div className="text-center my-3">
-                <Slab color="#ff9900" size="medium" text="ON YOUR WORK SIR" />
-              </div>
-            )}
-
 
             <div
               style={{
