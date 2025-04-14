@@ -9,10 +9,17 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [RetypePassword, setRetypePassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false); // State for terms acceptance
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!acceptedTerms) {
+      showToast("error", "You must accept the Terms and Conditions to sign up.");
+      return;
+    }
+
     try {
       const response = await axiosInstance.post("/signup", {
         name,
@@ -214,15 +221,35 @@ function Signin() {
                 `}
               </style>
             </div>
+
+            {/* Terms and Conditions */}
+            <div className="mb-3">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptedTerms}
+                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                style={{ marginRight: '10px' }}
+              />
+              <label htmlFor="terms" style={{ color: '#b3b3b3', fontSize: '14px' }}>
+                I agree to the{" "}
+                <a href="/terms" style={{ color: '#ff9900', textDecoration: 'none' }}>
+                  Terms and Conditions
+                </a>
+              </label>
+            </div>
+
             <button
               type="submit"
               className="btn w-100"
               style={{
-                backgroundColor: '#ff9900',
+                backgroundColor: acceptedTerms ? '#ff9900' : '#888',
                 color: 'white',
                 border: 'none',
                 borderRadius: '5px',
+                cursor: acceptedTerms ? 'pointer' : 'not-allowed',
               }}
+              disabled={!acceptedTerms}
             >
               Sign Up
             </button>
