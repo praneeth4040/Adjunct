@@ -113,7 +113,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
       }
 
       // Respond back with a success message
-      res.redirect("https://adjunct-frontend-beta.onrender.com/home")
+      res.redirect("http://localhost:5173/home")
       
     } catch (err) {
       console.error('Error storing user data:', err);
