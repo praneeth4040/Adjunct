@@ -299,11 +299,11 @@ const TermsAndConditions = () => {
               <span style={{ color: "rgb(0, 58, 250)" }}>
                 <bdt className="question">
                   <a
-                    href="http://www.adjunct.org"
+                    href="https://www.adjunct.in"
                     target="_blank"
                     data-custom-class="link"
                   >
-                    http://www.adjunct.org
+                    https://www.adjunct.in
                   </a>
                 </bdt>
               </span>{" "}

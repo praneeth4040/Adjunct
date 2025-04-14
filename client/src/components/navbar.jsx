@@ -13,7 +13,9 @@ function Navbar() {
     ? [
         { path: "/profile", label: "Profile" },
         { path: "/home", label: "Home" },
+
         { path: "/blogs", label: "Permissions" }
+
       ]
     : [
         { path: "/login", label: "Login" },
