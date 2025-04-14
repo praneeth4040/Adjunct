@@ -256,9 +256,9 @@ function Signin() {
           </form>
           <p className="text-center mt-3" style={{ color: '#b3b3b3' }}>
             Already have an account?{' '}
-            <a href="/login" className="text-primary" style={{ textDecoration: 'none' }}>
-              Login
-            </a>
+            <Link to="/login" className="text-primary" style={{ textDecoration: 'none' }}>
+    Login
+  </Link>
           </p>
         </div>
       </div>
