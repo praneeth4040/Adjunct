@@ -13,7 +13,7 @@ const router = express.Router();
 passport.use(new (require('passport-google-oauth20').Strategy)({
   clientID: '669305533138-eq57j7801468ad517nru7hic6jbulcij.apps.googleusercontent.com',
   clientSecret: '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',
-  callbackURL: 'http://localhost:3000/auth/google/callback',
+  callbackURL: 'https://adjunct-backend.onrender.com/auth/google/callback',
   accessType: 'offline',  // Request refresh token
   prompt: 'consent',     // Request consent to ensure refresh token
   scope: ['https://www.googleapis.com/auth/gmail.send', 'email', 'profile'],
@@ -113,7 +113,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
       }
 
       // Respond back with a success message
-      res.redirect("http://localhost:5173/home")
+      res.redirect("https://adjunct-frontend-beta.onrender.com/home")
       
     } catch (err) {
       console.error('Error storing user data:', err);

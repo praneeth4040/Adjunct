@@ -25,7 +25,7 @@ mongoose.connect(connection).then(()=>console.log("mongodb connected successfull
 });
 app.use(express.json());
 app.use(cors({
-        origin: 'http://localhost:5173',
+        origin: ['http://localhost:5173',"https://adjunct-frontend-beta.onrender.com"],
         methods: ['GET', 'POST' ,'PUT','DELETE'],
         allowedHeaders: ['Content-Type', 'Authorization']  // Allow specific headers
 }));
