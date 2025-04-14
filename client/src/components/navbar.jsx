@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ArrowRight } from 'lucide-react';
 import Logo from '../assets/logo.webp';
 
@@ -7,14 +7,13 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const location = useLocation();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const navItems = isLoggedIn
     ? [
         { path: "/profile", label: "Profile" },
         { path: "/home", label: "Home" },
-       
-        { path: "/blogs", label: "Permissions"}
+        { path: "/blogs", label: "Permissions" }
       ]
     : [
         { path: "/login", label: "Login" },
@@ -22,13 +21,36 @@ function Navbar() {
       ];
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    setIsLoggedIn(!!token);
+    const checkAuthToken = () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        if (payload.exp && payload.exp < currentTime) {
+          // Token is expired
+          localStorage.removeItem("authToken");
+          setIsLoggedIn(false);
+        } else {
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuthToken();
 
     const currentPath = location.pathname;
     const index = navItems.findIndex((item) => currentPath.includes(item.path));
     setActiveIndex(index >= 0 ? index : null);
-  }, [location, navItems]);
+  }, [location]);
 
   const handleClick = (index) => {
     setActiveIndex(index);
@@ -60,7 +82,7 @@ function Navbar() {
         {!isLoggedIn && (
           <button
             className="btn btn-warning fw-bold d-flex align-items-center gap-2"
-            onClick={() => navigate('/signin')} // Use navigate instead of window.location.href
+            onClick={() => navigate('/signin')}
           >
             <ArrowRight size={16} /> Get Started
           </button>
