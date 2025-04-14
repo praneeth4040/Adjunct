@@ -14,7 +14,7 @@ function Navbar() {
         { path: "/home", label: "Home" },
        
         { path: "/blogs", label: "Permissions" },
-        {path:"/terms",label:"Terms and conditions"}
+        
 
       ]
     : [

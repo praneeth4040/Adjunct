@@ -15,7 +15,7 @@ function Footer() {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '50px', marginTop: '30px' }}>
         <div>
           <h4 style={{ color: '#B0B0B0' }}>
-            <a href="/terms-and-conditions" style={{ color: '#B0B0B0', textDecoration: 'none' }}>
+            <a href="/terms" style={{ color: '#B0B0B0', textDecoration: 'none' }}>
               Terms and Conditions
             </a>
           </h4>
