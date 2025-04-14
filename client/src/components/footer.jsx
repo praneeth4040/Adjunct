@@ -20,7 +20,7 @@ function Footer() {
             </a>
           </h4>
           <p>
-            <a style={{ color: '#B0B0B0', textDecoration: 'none' }}>privacy policy</a>
+            <a href="/privacy"style={{ color: '#B0B0B0', textDecoration: 'none' }}>privacy policy</a>
           </p>
           <p>
             <a style={{ color: '#B0B0B0', textDecoration: 'none' }}>user conditions</a>
@@ -44,7 +44,7 @@ function Footer() {
         </div>
         <div>
           <h4 style={{ color: '#B0B0B0' }}>
-            <a href="/about-us" style={{ color: '#B0B0B0', textDecoration: 'none' }}>
+            <a href="/" style={{ color: '#B0B0B0', textDecoration: 'none' }}>
               Company
             </a>
           </h4>
