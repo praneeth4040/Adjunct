@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
 import { ArrowRight } from 'lucide-react';
 import Logo from '../assets/logo.webp';
 
@@ -7,15 +7,14 @@ function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const navItems = isLoggedIn
     ? [
         { path: "/profile", label: "Profile" },
         { path: "/home", label: "Home" },
        
-        { path: "/blogs", label: "Permissions" },
-        
-
+        { path: "/blogs", label: "Permissions
       ]
     : [
         { path: "/login", label: "Login" },
@@ -59,7 +58,10 @@ function Navbar() {
           ))}
         </ul>
         {!isLoggedIn && (
-          <button className="btn btn-warning fw-bold d-flex align-items-center gap-2" onClick={() => window.location.href = '/signin'}>
+          <button
+            className="btn btn-warning fw-bold d-flex align-items-center gap-2"
+            onClick={() => navigate('/signin')} // Use navigate instead of window.location.href
+          >
             <ArrowRight size={16} /> Get Started
           </button>
         )}
