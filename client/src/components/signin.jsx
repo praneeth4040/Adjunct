@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axiosInstance from '../axiosConfig'; // Import the Axios instance
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { showToast } from './totify';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
