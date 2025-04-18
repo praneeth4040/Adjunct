@@ -1,18 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../assets/logo.webp';
 import './openingpage.css';
 import Footer from './footer';
+import { BotMessageSquare , Mail, ShieldCheck} from 'lucide-react';
 
 function OpenPage() {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleTryForFree = () => {
     const token = localStorage.getItem('authToken');
     if (token) {
-      navigate('/home'); // Navigate to /home
+      navigate('/home');
     } else {
-      navigate('/signin'); // Navigate to /signin
+      navigate('/signin');
     }
   };
 
@@ -31,7 +32,7 @@ function OpenPage() {
           Personalized AI for Your <span className="color-changing">Needs</span>
         </h1>
         <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
-          Discover the perfect AI companion tailored to your requirements, whether for work or daily activities.
+        Let our AI compose and send emails on your behalf. Save time and ensure professional communication, every time.
         </p>
         <button style={{
           backgroundColor: '#FFA500',
@@ -44,6 +45,17 @@ function OpenPage() {
         }} onClick={handleTryForFree}>
           Try for Free
         </button>
+        <div className="d-flex justify-content-center align-items-center gap-4 mt-4 text-light">
+  <div className="d-flex align-items-center gap-2">
+    <i className="bi bi-envelope-fill text-warning fs-5"></i>
+    <span>Secure Email Integration</span>
+  </div>
+  <div className="d-flex align-items-center gap-2">
+    <i className="bi bi-shield-lock-fill text-warning fs-5"></i>
+    <Link to="/privacy" className="text-white text-decoration-none">Privacy Policy</Link>
+  </div>
+</div>
+
       </div>
 
       <div className="container mt-5" style={{
@@ -54,68 +66,60 @@ function OpenPage() {
         marginTop: '160px'
       }}>
         <div className="text-center" style={{ maxWidth: '300px' }}>
-          <i className="bi bi-gear" style={{ fontSize: '2rem', color: 'white' }}></i>
-          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Customizable Solutions</p>
-          <p style={{ fontSize: '1rem' }}>Tailor the AI's capabilities to fit your individual needs and preferences.</p>
+        <BotMessageSquare size={36} color="#ffffff" />
+          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>AI-Powered Communication</p>
+          <p style={{ fontSize: '1rem' }}>Our advanced AI understands context and composes professional emails tailored to your needs. More AI features coming soon!</p>
         </div>
         <div className="text-center" style={{ maxWidth: '300px' }}>
-          <i className="bi bi-laptop" style={{ fontSize: '2rem', color: 'white' }}></i>
-          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Work & Personal Use</p>
-          <p style={{ fontSize: '1rem' }}>Utilize the AI for professional tasks as well as for managing your day-to-day activities.</p>
+        <Mail size={36} />
+          <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Email Integration - Available Now</p>
+          <p style={{ fontSize: '1rem' }}>Currently, you can send emails from your own email address with proper authorization. Stay tuned for more communication features!</p>
         </div>
         <div className="text-center" style={{ maxWidth: '300px' }}>
-          <i className="bi bi-shield-lock" style={{ fontSize: '2rem', color: 'white' }}></i>
+        <ShieldCheck size={36} />
           <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginTop: '10px' }}>Secure Data Handling</p>
-          <p style={{ fontSize: '1rem' }}>Rest assured knowing that your information is kept private and secure at all times.</p>
+          <p style={{ fontSize: '1rem' }}>Your privacy is our priority.
+          All your information is handled with the utmost care, ensuring it's always protected and confidential.</p>
         </div>
       </div>
-      {/* 
-      <footer style={{
-        backgroundColor: '#171A1F',
-        color: 'white',
-        padding: '60px 360px',
-        marginTop: '100px',
-        textAlign: 'center'
+
+      {/* HOW IT WORKS SECTION */}
+      <div className="how-it-works container" style={{
+        marginTop: '160px',
+        padding: '60px 20px',
+        borderTop: '1px solid #333',
+        width: '100%'
       }}>
-        <img src={Logo} alt="Adjunct Logo" style={{ height: '100px', width: 'auto' }} />
-        <p>Subscribe to our newsletter</p>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
-          <input type="email" placeholder="Input your email" style={{ padding: '10px', borderRadius: '5px', border: 'none', width: '250px' }} />
-          <button style={{ backgroundColor: '#F39C12', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px' }}>Subscribe</button>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '50px', marginTop: '30px' }}>
-          <div>
-            <h4>Product</h4>
-            <p>Features</p>
-            <p>Pricing</p>
+        <h2 style={{ fontWeight: 'bold', marginBottom: '50px', color: 'white' }}>How It Works</h2>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          gap: '60px'
+        }}>
+          <div className="step" style={{ maxWidth: '200px' }}>
+            <i className="bi bi-box-arrow-in-right" style={{ fontSize: '2.5rem', color: '#FFA500' }}></i>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>Login</p>
+            <p style={{ fontSize: '0.9rem', color: '#cccccc' }}>Sign in to your account to get started</p>
           </div>
-          <div>
-            <h4>Resources</h4>
-            <p>Blog</p>
-            <p>User guides</p>
-            <p>Webinars</p>
+          <div className="step" style={{ maxWidth: '200px' }}>
+            <i className="bi bi-file-earmark-lock" style={{ fontSize: '2.5rem', color: '#FFA500' }}></i>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>Permission</p>
+            <p style={{ fontSize: '0.9rem', color: '#cccccc' }}>Review and grant email sending permissions</p>
           </div>
-          <div>
-            <h4>Company</h4>
-            <p>About us</p>
-            <p>Contact us</p>
+          <div className="step" style={{ maxWidth: '200px' }}>
+            <i className="bi bi-envelope-check" style={{ fontSize: '2.5rem', color: '#FFA500' }}></i>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>Google Authorization</p>
+            <p style={{ fontSize: '0.9rem', color: '#cccccc' }}>Securely connect your Google account for email access</p>
           </div>
-          <div>
-            <h4>Plans & Pricing</h4>
-            <p>Personal</p>
-            <p>Start up</p>
-            <p>Organization</p>
+          <div className="step" style={{ maxWidth: '200px' }}>
+            <i className="bi bi-chat-dots" style={{ fontSize: '2.5rem', color: '#FFA500' }}></i>
+            <p style={{ fontWeight: 'bold', marginTop: '10px' }}>Chat Interface</p>
+            <p style={{ fontSize: '0.9rem', color: '#cccccc' }}>Start chatting with our AI to compose and send emails</p>
           </div>
         </div>
-        <p style={{ marginTop: '20px', fontSize: '0.8rem' }}>© 2024 Brand, Inc. · Privacy · Terms · Sitemap</p>
-        <div style={{ display: 'flex', justifyContent: 'right', gap: '15px', marginTop: '20px' }}>
-          <i className="bi bi-twitter" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
-          <i className="bi bi-facebook" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
-          <i className="bi bi-linkedin" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
-          <i className="bi bi-youtube" style={{ fontSize: '1.5rem', color: '#FFA500' }}></i>
-        </div>
-      </footer>
-      */}
+      </div>
+
       <Footer />
     </div>
   );

@@ -89,8 +89,9 @@ function Home() {
 
       const jsonGeneratedResponse = response.data.generatedPrompt;
 
-      if (jsonGeneratedResponse.emailAPI === true) {
+      if (jsonGeneratedResponse.emailAPI === true || jsonGeneratedResponse.emailApi === 'true') {
         const { subject, receiptentEmailId: recipient, body } = jsonGeneratedResponse;
+        
         setEmailData({ subject, recipient, body });
 
         setChatMessages([
