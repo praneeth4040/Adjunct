@@ -248,11 +248,7 @@ function privacy() {
         <div style={{ lineHeight: "1.5" }}>
           <span style={{ fontSize: 15 }}>
             <span data-custom-class="body_text">
-              <strong>What personal information do we process?</strong> When you
-              visit, use, or navigate our Services, we may process personal
-              information depending on how you interact with us and the
-              Services, the choices you make, and the products and features you
-              use. Learn more about&nbsp;
+              <strong>What personal information do we process?</strong> We collect personal information like your name, email, and login details when you register, use our services, or contact us. We do not collect or process any sensitive information.&nbsp;
             </span>
           </span>
           <a data-custom-class="link" href="#personalinfo">
@@ -292,9 +288,7 @@ function privacy() {
             <span data-custom-class="body_text">
               <strong>Do we collect any information from third parties?</strong>{" "}
               <bdt className="block-component" />
-              We may collect information from public databases, marketing
-              partners, social media platforms, and other outside sources. Learn
-              more about&nbsp;
+              We do not collect any information from public databases, marketing partners, social media platforms, or other external sources.&nbsp;
             </span>
           </span>
           <a data-custom-class="link" href="#othersources">
@@ -319,9 +313,8 @@ function privacy() {
             <span data-custom-class="body_text">
               <strong>How do we process your information?</strong> We process
               your information to provide, improve, and administer our Services,
-              communicate with you, for security and fraud prevention, and to
-              comply with law. We may also process your information for other
-              purposes with your consent. We process your information only when
+               for security and fraud prevention, and to
+              comply with law.  We process your information only when
               we have a valid legal reason to do so. Learn more about&nbsp;
             </span>
           </span>
@@ -346,10 +339,10 @@ function privacy() {
                 types of <bdt className="statement-end-if-in-editor" />
                 parties do we share personal information?
               </strong>{" "}
-              We may share information in specific situations and with specific{" "}
-              <bdt className="block-component" />
-              categories of <bdt className="statement-end-if-in-editor" />
-              third parties. Learn more about&nbsp;
+              We do not share your personal information in any situation or with any third parties.
+              
+              
+             &nbsp;
             </span>
           </span>
           <a data-custom-class="link" href="#whoshare">
