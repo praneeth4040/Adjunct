@@ -38,7 +38,9 @@ app.use('/getData',getData);
 app.use("/auth",auth);
 app.use('/sendemail',sendMailAPI);
 
-
+app.get('/',(req,res)=>{
+    res.status(200).json({message:"the server is live"});
+})
 
 app.post('/askAi',verifyToken,async(req,res)=>{
     
