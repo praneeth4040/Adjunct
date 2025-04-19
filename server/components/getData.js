@@ -103,7 +103,7 @@ router.delete('/delete', verifyToken, async (req, res) => {
   }
 });
 
-router.delete('/clearPermission',verifyToken, async (req,res)=>{
+router.delete('/removePermissions',verifyToken, async (req,res)=>{
   const tokenUser = req.user;
   if(!tokenUser || !tokenUser.email){
     return res.status(404).json({message:"user Not found or Token invalid"});

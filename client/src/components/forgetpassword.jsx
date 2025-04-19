@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import axiosInstance from "../axiosConfig"; // Import the Axios instance
 import "./forgotpassword.css"; // Add your custom CSS for additional styles
+import { showToast } from "./totify";
+import { useNavigate } from "react-router-dom";
+import { use } from "react";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState("email");
@@ -8,6 +11,7 @@ const ForgotPassword = () => {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailSubmit = async () => {
     if (email) {
@@ -45,19 +49,28 @@ const ForgotPassword = () => {
       switch (val) {
         case 0:
           console.log(response.data.message);
+          showToast("error", "Email or OTP not received");
           break;
         case 1:
           console.log(response.data.message);
+          showToast("error", "Email not existed");
+          useNavigate("/signin");
+          setStep("email");
           break;
         case 2:
           console.log(response.data.message);
+          showToast("success", "Verified successfully");
+          useNavigate("/login");
           setStep("reset");
+          na
           break;
         case 3:
           console.log(response.data.message);
+          showToast("error", "OTP invalid");
           break;
         default:
           console.log("internal error");
+          showToast("error", "Internal error");
           break;
       }
     } catch (err) {
@@ -73,12 +86,16 @@ const ForgotPassword = () => {
         switch (val) {
           case 0:
             console.log(response.data.message);
+            showToast("error", "Email not existed");
             break;
           case 1:
             console.log(response.data.message);
+            showToast("success", "Password reset successfully");
+            navigate("/login");
             break;
           case 2:
             console.log(response.data.message);
+            showToast("error", "Internal error From server side");
             break;
           default:
             console.log("internal error");
@@ -88,7 +105,7 @@ const ForgotPassword = () => {
         console.log(err);
       }
     } else {
-      alert("Passwords do not match!");
+      showToast("error", "Passwords do not match");
     }
   };
 
