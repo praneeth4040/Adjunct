@@ -79,7 +79,9 @@ function Home() {
 
       const response = await axiosInstance.post(
         '/askAi',
-        { userPrompt: promptText },
+        { userPrompt: promptText ,
+          chatHistory: newChatMessages //send the chat history to the server
+        },
         {
           headers: { Authorization: `Bearer ${token}` },
           maxContentLength: Infinity,
