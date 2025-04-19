@@ -48,10 +48,22 @@ app.post('/askAi',verifyToken,async(req,res)=>{
     const user= await UserInfo.findOne({email:userEmail})
     console.log(user)
 
-     const { userPrompt} = req.body;
+     const { userPrompt, chatHistory} = req.body;
      console.log(userPrompt)
+     console.log(chatHistory)
+     let contextPrompt = "";
+     let totalPrompt ="";
+    if (chatHistory && chatHistory.length > 0) {
+        contextPrompt = "Here's the previous conversation:\n";
+        chatHistory.slice(-10).forEach(message => {
+            contextPrompt += `${message.type === 'user' ? 'User' : 'AI'}: ${message.content}\n`;
+        });
+        contextPrompt += "\nNow, the user's new prompt is: ";
+    }
+    totalPrompt = contextPrompt + userPrompt;
+    console.log("just before sending to the json the print is",userPrompt)
      const promptUserDetails= {
-        "userPrompt": userPrompt,
+        "userPrompt": totalPrompt,
         "user":user,
         "generatedResponse":null,
         "emailApi":false  ,
