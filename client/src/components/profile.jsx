@@ -76,16 +76,17 @@ function Profile() {
     try {
       const res = await axiosInstance.delete(
         "/getData/removePermissions",
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
       );
       console.log(res.data);
       showToast("info", res.data.message);
-      //showToast("info", "Permissions removed.");
     } catch (err) {
       showToast("error", "Failed to remove permissions");
     }
   };
+  
 
   const handleDeleteAccount = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete your account?");
