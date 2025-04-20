@@ -74,12 +74,14 @@ function Profile() {
 
   const handleRemovePermissions = async () => {
     try {
-      await axiosInstance.delete(
+      const res = await axiosInstance.delete(
         "/getData/removePermissions",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      showToast("info", "Permissions removed.");
+      console.log(res.data);
+      showToast("info", res.data.message);
+      //showToast("info", "Permissions removed.");
     } catch (err) {
       showToast("error", "Failed to remove permissions");
     }
