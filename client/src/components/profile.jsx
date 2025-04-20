@@ -74,7 +74,7 @@ function Profile() {
 
   const handleRemovePermissions = async () => {
     try {
-      await axiosInstance.post(
+      await axiosInstance.delete(
         "/getData/removePermissions",
         {},
         { headers: { Authorization: `Bearer ${token}` } }
