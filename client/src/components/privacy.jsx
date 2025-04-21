@@ -37,7 +37,7 @@ function privacy() {
         <strong>
           <span style={{ fontSize: 15 }}>
             <span data-custom-class="subtitle">
-              Last updated <bdt className="question">April 14, 2025</bdt>
+              Last updated <bdt className="question">April 21, 2025</bdt>
             </span>
           </span>
         </strong>
@@ -1214,6 +1214,12 @@ function privacy() {
                     <h3>Google API</h3>
                   </span>
                 </strong>
+                <strong>
+                <span>
+              Our application, which accesses Google Workspace APIs, does not retain user data obtained through these APIs for the purpose of developing, improving, or training generalized artificial intelligence (AI) or machine learning (ML) models. Any data accessed through Google Workspace APIs is used solely for providing the specific functionality of our application to users and is handled in accordance with our data retention policies and Google's API Services User Data Policy. We are committed to protecting user privacy and ensuring appropriate use of all data accessed through Google services.
+              </span>
+                </strong>
+              <br></br>
                 <span data-custom-class="body_text">
                   Our use of information received from Google APIs will adhere
                   to&nbsp;
