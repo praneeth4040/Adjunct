@@ -19,6 +19,7 @@
   "homepage": "https://github.com/praneeth4040/myAi#readme",
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
+    "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

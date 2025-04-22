@@ -16,6 +16,9 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserInfo=require("./schemas/userInfoSchema")
 const auth = require("./components/auth")
 const sendMailAPI=require("./components/sendMailAPI")
+const weather = require("./components/APIs/weather");
+
+
 const app = express();
 const PORT = process.env.PORT ||3000;
 const connection = process.env.mongodb
@@ -37,6 +40,7 @@ app.use('/setup',setUp);
 app.use('/getData',getData);
 app.use("/auth",auth);
 app.use('/sendemail',sendMailAPI);
+app.use('/weather', weather);
 
 app.get('/',(req,res)=>{
     res.status(200).json({message:"the server is live"});

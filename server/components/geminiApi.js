@@ -120,6 +120,7 @@ let tofrontend = sending
     tofrontend = JSON.parse(tofrontend); // Parse the JSON string
     console.log("2", typeof tofrontend);
     console.log(tofrontend);
+    
     return tofrontend;
   } catch (error) {
     console.error("Error parsing JSON:", error.message);
