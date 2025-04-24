@@ -1,0 +1,23 @@
+{
+    "name": "sendEmail",
+    "description": "Send an email with a specified subject and body to a recipient.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "string",
+          "description": "The recipient's email address."
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject line of the email."
+        },
+        "body": {
+          "type": "string",
+          "description": "The content of the email message."
+        }
+      },
+      "required": ["to", "subject", "body"]
+    }
+  }
+  

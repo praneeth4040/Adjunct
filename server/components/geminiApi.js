@@ -1,4 +1,4 @@
-const {
+/*{const {
   GoogleGenerativeAI,
   HarmCategory,
   HarmBlockThreshold,
@@ -127,4 +127,150 @@ let tofrontend = sending
     throw new Error("Failed to parse JSON response from the model.");
   }
 }
-module.exports=generator;
+module.exports=generator;}*/
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const apiKey = process.env.GEMINI_API;
+const genAI = new GoogleGenerativeAI(apiKey);
+
+const weatherSchema = require("../JSON/weatherSchema.json");
+const sendEmailSchema = require("../JSON/sendEmailSchema.json");
+const handleFunctionCall = require("./functionHandler");
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.0-flash-exp",
+});
+
+const generationConfig = {
+  temperature: 1,
+  topP: 0.95,
+  topK: 40,
+  maxOutputTokens: 8192,
+};
+
+const tools = [
+  {
+    functionDeclarations: [
+      {
+        name: weatherSchema.name,
+        description: weatherSchema.description,
+        parameters: weatherSchema.parameters,
+      },
+      {
+        name: sendEmailSchema.name,
+        description: sendEmailSchema.description,
+        parameters: sendEmailSchema.parameters,
+      }
+    ]
+  }
+];
+
+async function generator(prompt, userConfirmation = null, userDetails = {}) {
+  console.log("Prompt:", prompt);
+  console.log("User Confirmation:", userConfirmation);
+  console.log("User Details:", userDetails);
+
+  const context = [];
+  let pendingEmail = null;
+  const MAX_LOOPS = 5;
+  let loopCount = 0;
+  if (!userConfirmation) {
+    context.push({
+      role: "user",
+      parts: [
+        {
+          text: `You are an AI assistant. You can perform two tasks: get weather information or send emails using provided tools.
+    However, you are also expected to respond to general user queries conversationally if they do not require tools.
+    The following user information is available:
+    - Name: ${userDetails.name}
+    - Email: ${userDetails.email}
+    - Google ID: ${userDetails.googleid}
+    
+    User Prompt: ${prompt}`
+        }
+      ]
+    });
+    
+  } else {
+    context.push({
+      role: "user",
+      parts: [
+        {
+          text: userConfirmation
+        }
+      ]
+    });
+  }
+
+  while (loopCount < MAX_LOOPS) {
+    const response = await model.generateContent({
+      contents: context,
+      generationConfig,
+      tools,
+    });
+
+    const part = response?.response?.candidates?.[0]?.content?.parts?.[0];
+
+    if (part?.functionCall) {
+      const functionCall = part.functionCall;
+
+      // Add the model's function call to the context
+      context.push({
+        role: "model",
+        parts: [{ functionCall }]
+      });
+
+      if (functionCall.name === "sendEmail" && !userConfirmation) {
+        pendingEmail = functionCall;
+        return {
+          status: "confirmation_required",
+          message: `📨 Draft Email:\nTo: ${functionCall.args.to}\nSubject: ${functionCall.args.subject}\nBody: ${functionCall.args.body}\n\nDo you want to send this email? (yes/no)`,
+          pendingEmail
+        };
+      }
+
+      const result = await handleFunctionCall(functionCall);
+
+      context.push({
+        role: "function",
+        parts: [
+          {
+            functionResponse: {
+              name: functionCall.name,
+              response: result
+            }
+          }
+        ]
+      });
+
+      loopCount++;
+    } else if (part?.text) {
+      const text = part.text.trim().toLowerCase();
+
+      if (userConfirmation && text.includes("yes")) {
+        const result = await handleFunctionCall(pendingEmail);
+        return {
+          status: "email_sent",
+          message: `✅ Email sent to ${pendingEmail.args.to} with subject "${pendingEmail.args.subject}".`
+        };
+      }
+
+      return {
+        status: "final_response",
+        message: part.text
+      };
+    } else {
+      return {
+        status: "error",
+        message: "No function call or meaningful response generated."
+      };
+    }
+  }
+
+  return {
+    status: "loop_limit_reached",
+    message: "⚠️ Reached maximum function call loop limit."
+  };
+}
+
+module.exports = generator;
+
