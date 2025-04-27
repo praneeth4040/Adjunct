@@ -137,140 +137,139 @@ const sendEmailSchema = require("../JSON/sendEmailSchema.json");
 const handleFunctionCall = require("./functionHandler");
 
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash-exp",
+    model: "gemini-2.0-flash-exp",
 });
 
 const generationConfig = {
-  temperature: 1,
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
+    temperature: 1,
+    topP: 0.95,
+    topK: 40,
+    maxOutputTokens: 8192,
 };
 
 const tools = [
-  {
-    functionDeclarations: [
-      {
-        name: weatherSchema.name,
-        description: weatherSchema.description,
-        parameters: weatherSchema.parameters,
-      },
-      {
-        name: sendEmailSchema.name,
-        description: sendEmailSchema.description,
-        parameters: sendEmailSchema.parameters,
-      }
-    ]
-  }
+    {
+        functionDeclarations: [
+            {
+                name: weatherSchema.name,
+                description: weatherSchema.description,
+                parameters: weatherSchema.parameters,
+            },
+            {
+                name: sendEmailSchema.name,
+                description: sendEmailSchema.description,
+                parameters: sendEmailSchema.parameters,
+            }
+        ]
+    }
 ];
 
-async function generator(prompt, userConfirmation = null, userDetails = {}) {
-  console.log("Prompt:", prompt);
-  console.log("User Confirmation:", userConfirmation);
-  console.log("User Details:", userDetails);
+async function generator(prompt,history, userDetails = {}) {
+    console.log("History:", history);
+    console.log("User Details:", userDetails);
 
-  const context = [];
-  let pendingEmail = null;
-  const MAX_LOOPS = 5;
-  let loopCount = 0;
-  if (!userConfirmation) {
-    context.push({
-      role: "user",
-      parts: [
-        {
-          text: `You are an AI assistant. You can perform two tasks: get weather information or send emails using provided tools.
-    However, you are also expected to respond to general user queries conversationally if they do not require tools.
-    The following user information is available:
-    - Name: ${userDetails.name}
-    - Email: ${userDetails.email}
-    - Google ID: ${userDetails.googleid}
-    
-    User Prompt: ${prompt}`
-        }
-      ]
-    });
-    
-  } else {
-    context.push({
-      role: "user",
-      parts: [
-        {
-          text: userConfirmation
-        }
-      ]
-    });
-  }
-
-  while (loopCount < MAX_LOOPS) {
-    const response = await model.generateContent({
-      contents: context,
-      generationConfig,
-      tools,
-    });
-
-    const part = response?.response?.candidates?.[0]?.content?.parts?.[0];
-
-    if (part?.functionCall) {
-      const functionCall = part.functionCall;
-
-      // Add the model's function call to the context
-      context.push({
-        role: "model",
-        parts: [{ functionCall }]
-      });
-
-      if (functionCall.name === "sendEmail" && !userConfirmation) {
-        pendingEmail = functionCall;
-        return {
-          status: "confirmation_required",
-          message: `📨 Draft Email:\nTo: ${functionCall.args.to}\nSubject: ${functionCall.args.subject}\nBody: ${functionCall.args.body}\n\nDo you want to send this email? (yes/no)`,
-          pendingEmail
-        };
-      }
-
-      const result = await handleFunctionCall(functionCall);
-
-      context.push({
-        role: "function",
+    const context = [...history,
+      {
+        role: "user",
         parts: [
-          {
-            functionResponse: {
-              name: functionCall.name,
-              response: result
+            {
+                text: `You are an AI assistant named AssistBot. Your job is to help the user with tasks. The user's name is ${userDetails.name} and their email is ${userDetails.email}.
+
+                When the user asks you to write an email, your process should be:
+
+                1.  **Understand the email's purpose and recipient.**
+                2.  **Automatically generate a concise subject and a detailed body for the email.**
+                3.  **Present the complete drafted email (subject and body) to the user in a clear, readable format.**
+                4.  **Then, ask the user for confirmation to send the email.**
+
+                For example, if the user says "Write an email to john.doe@example.com about the meeting tomorrow at 10 AM", you should generate the subject and body yourself and show it to the user.
+
+                User Prompt: ${prompt}`
             }
-          }
         ]
-      });
-
-      loopCount++;
-    } else if (part?.text) {
-      const text = part.text.trim().toLowerCase();
-
-      if (userConfirmation && text.includes("yes")) {
-        const result = await handleFunctionCall(pendingEmail);
-        return {
-          status: "email_sent",
-          message: `✅ Email sent to ${pendingEmail.args.to} with subject "${pendingEmail.args.subject}".`
-        };
-      }
-
-      return {
-        status: "final_response",
-        message: part.text
-      };
-    } else {
-      return {
-        status: "error",
-        message: "No function call or meaningful response generated."
-      };
     }
-  }
+    ];
+    const MAX_LOOPS = 5;
+    let loopCount = 0;
 
-  return {
-    status: "loop_limit_reached",
-    message: "⚠️ Reached maximum function call loop limit."
-  };
+    while (loopCount < MAX_LOOPS) {
+        const response = await model.generateContent({
+            contents: context,
+            generationConfig,
+            tools,
+        });
+
+        const part = response?.response?.candidates?.[0]?.content?.parts?.[0];
+
+        if (part?.functionCall) {
+            const functionCall = part.functionCall;
+
+            // Add the model's function call to the context
+            context.push({
+                role: "model",
+                parts: [{ functionCall }]
+            });
+
+            const result = await handleFunctionCall(functionCall);
+
+            context.push({
+                role: "function",
+                parts: [
+                    {
+                        functionResponse: {
+                            name: functionCall.name,
+                            response: result
+                        }
+                    }
+                ]
+            });
+
+            loopCount++;
+        } else if (part?.text) {
+            const text = part.text.trim().toLowerCase();
+
+            // Check if the user is confirming the email in this turn
+            if (text.includes("yes") || text.includes("send it") || text.includes("ok")) {
+                // Look back in the history for a potential sendEmail function call
+                const sendEmailCall = history.find(
+                    (item) => item.role === "model" && item.parts?.[0]?.functionCall?.name === "sendEmail"
+                )?.parts?.[0]?.functionCall;
+
+                if (sendEmailCall) {
+                    const result = await handleFunctionCall({ ...sendEmailCall, args: { ...sendEmailCall.args, confirmed: true } });
+                    return {
+                        status: "email_sent",
+                        message: `✅ Email sent to ${sendEmailCall.args.to} with subject "${sendEmailCall.args.subject}".`,
+                        updatedHistory: context
+                    };
+                } else {
+                    return {
+                        status: "final_response",
+                        message: part.text, // Or a message like "No email to confirm."
+                        updatedHistory: context
+                    };
+                }
+            } else {
+                return {
+                    status: "final_response",
+                    message: part.text,
+                    updatedHistory: context
+                };
+            }
+        } else {
+            return {
+                status: "error",
+                message: "No function call or meaningful response generated.",
+                updatedHistory: context
+            };
+        }
+    }
+
+    return {
+        status: "loop_limit_reached",
+        message: "⚠️ Reached maximum function call loop limit.",
+        updatedHistory: context
+    };
 }
 
 module.exports = generator;
-

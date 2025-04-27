@@ -87,54 +87,38 @@ let pendingEmail = null; // Store the pending email until the user confirms
 
 app.post('/askAi', verifyToken, async (req, res) => {
   try {
-    const { prompt, userConfirmation } = req.body;
+    const { userPrompt: prompt, chatHistory: history = [] } = req.body; // Renamed for clarity
     const user = req.user;
 
-    // Fetch user details from DB
+    // 🔍 Fetch user details
     const userDetails = await UserInfo.findOne({ email: user.email });
     if (!userDetails) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Create a formatted string for the prompt
-    const userContextString = `User Info:\nName: ${userDetails.name}\nEmail: ${userDetails.email}\nGoogle ID: ${userDetails.googleId}`;
+    // 🧠 Format the incoming chat history for Gemini
+    const geminiFormattedHistory = history.map(message => ({
+      role: message.type === 'user' ? 'user' : 'model', // Adjust 'model' if your AI type is different
+      parts: [{ text: message.content }],
+    }));
 
-    if (!userConfirmation) {
-      // First step: generate prompt from AI
-      const fullPrompt = await generator(prompt,null, userContextString); // Make sure your generator handles both strings
+    // 🧠 Add the current user prompt in the Gemini format
+    const currentPrompt = {
+      role: "user",
+      parts: [{ text: prompt }]
+    };
 
-      if (fullPrompt.status === "confirmation_required") {
-        pendingEmail = fullPrompt.pendingEmail;
-        return res.status(200).json({
-          generatedPrompt: fullPrompt.message
-        });
-      } else {
-        return res.status(200).json({
-          generatedPrompt: fullPrompt.message
-        });
-      }
-    } else {
-      // Second step: handle confirmation (yes/no)
-      if (userConfirmation.toLowerCase() === "yes" && pendingEmail) {
-        const sendResult = await handleFunctionCall(pendingEmail);
-        pendingEmail = null; // Clear after sending
-        return res.status(200).json({
-          status: "email_sent",
-          message: `✅ Email sent to ${sendResult.to} with subject "${sendResult.subject}".`
-        });
-      } else if (userConfirmation.toLowerCase() === "no") {
-        pendingEmail = null; // Clear on cancel
-        return res.status(200).json({
-          status: "email_not_sent",
-          message: "❌ Email not sent."
-        });
-      } else {
-        return res.status(400).json({
-          status: "invalid_confirmation",
-          message: "Invalid confirmation response. Please reply with 'yes' or 'no'."
-        });
-      }
-    }
+    // ⚙️ Run through generator, passing the formatted history and current prompt
+    const result = await generator(prompt, [...geminiFormattedHistory, currentPrompt], userDetails);
+
+    // 📨 Return AI response and (optionally) the history as returned by the generator
+    return res.status(200).json({
+      status: result.status,
+      message: result.message,
+      generatedPrompt: result.generatedPrompt, // Assuming your generator returns the AI's response this way
+      // You might want to send back the 'result.updatedHistory' if your generator modifies it
+    });
+
   } catch (err) {
     console.error("Error in /askAi:", err);
     return res.status(500).json({ error: "Something went wrong." });
