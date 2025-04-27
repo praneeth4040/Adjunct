@@ -1,0 +1,28 @@
+{
+  "name": "sendEmail",
+  "description": "Send an email with a specified subject and body to a recipient. A confirmation is needed before sending.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "to": {
+        "type": "string",
+        "description": "The recipient's email address."
+      },
+      "subject": {
+        "type": "string",
+        "description": "The subject line of the email. You have to generate this using the given context."
+      },
+      "body": {
+        "type": "string",
+        "description": "The content of the email message. You have to generate this using the given context."
+      },
+      "confirmed": {
+        "type": "boolean",
+        "description": "Whether the user has confirmed sending the email. Default is false."
+      }
+    },
+    "required": ["to", "subject", "body","confirmed"]
+  }
+}
+
+  

@@ -42,7 +42,7 @@ app.get('/',(req,res)=>{
     res.status(200).json({message:"the server is live"});
 })
 
-app.post('/askAi',verifyToken,async(req,res)=>{
+/*{app.post('/askAi',verifyToken,async(req,res)=>{
     
     const userEmail=req.user.email
     const user= await UserInfo.findOne({email:userEmail})
@@ -80,8 +80,52 @@ app.post('/askAi',verifyToken,async(req,res)=>{
     }else{
         res.status(400).json("give correct prompt");
     }
-})
+})}*/
+const handleFunctionCall = require("./components/functionHandler");
+const { google } = require('googleapis');
+let pendingEmail = null; // Store the pending email until the user confirms
 
+app.post('/askAi', verifyToken, async (req, res) => {
+  try {
+    const { userPrompt: prompt, chatHistory: history = [] } = req.body; // Renamed for clarity
+    const user = req.user;
+
+    // 🔍 Fetch user details
+    const userDetails = await UserInfo.findOne({ email: user.email });
+    if (!userDetails) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // 🧠 Format the incoming chat history for Gemini
+    const geminiFormattedHistory = history.map(message => ({
+      role: message.type === 'user' ? 'user' : 'model', // Adjust 'model' if your AI type is different
+      parts: [{ text: message.content }],
+    }));
+
+    // 🧠 Add the current user prompt in the Gemini format
+    const currentPrompt = {
+      role: "user",
+      parts: [{ text: prompt }]
+    };
+
+    // ⚙️ Run through generator, passing the formatted history and current prompt
+    const result = await generator(prompt, [...geminiFormattedHistory, currentPrompt], userDetails);
+
+    // 📨 Return AI response and (optionally) the history as returned by the generator
+    return res.status(200).json({
+      status: result.status,
+      message: result.message,
+      generatedPrompt: result.generatedPrompt, // Assuming your generator returns the AI's response this way
+      // You might want to send back the 'result.updatedHistory' if your generator modifies it
+    });
+
+  } catch (err) {
+    console.error("Error in /askAi:", err);
+    return res.status(500).json({ error: "Something went wrong." });
+  }
+});
+
+    
 app.listen(PORT , ()=>{
     console.log(`the app is listening to`,PORT);
 })
