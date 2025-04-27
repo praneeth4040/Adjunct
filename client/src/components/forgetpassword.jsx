@@ -1,44 +1,29 @@
 import React, { useState } from "react";
-import axiosInstance from "../axiosConfig"; // Import the Axios instance
-import "./forgotpassword.css"; // Add your custom CSS for additional styles
+import axiosInstance from "../axiosConfig";
 import { showToast } from "./totify";
 import { useNavigate } from "react-router-dom";
-import { use } from "react";
+import "./forgotpassword.css";
 
 const ForgotPassword = () => {
-  const [step, setStep] = useState("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleEmailSubmit = async () => {
-    if (email) {
-      try {
-        const response = await axiosInstance.post("/login/forgot-password", { email });
-        const val = response.data.value;
-        switch (val) {
-          case 0:
-            console.log(response.data.message);
-            break;
-          case 1:
-            console.log(response.data.message);
-            break;
-          case 2:
-            console.log(response.data.message);
-            setStep("otp");
-            break;
-          case 3:
-            console.log(response.data.message);
-            break;
-          default:
-            console.log("internal error");
-            break;
-        }
-      } catch (err) {
-        console.log("error", err);
+    try {
+      const response = await axiosInstance.post("/login/forgot-password", { email });
+      const val = response.data.value;
+      if (val === 2) {
+        showToast("success", "OTP Sent to your email");
+      } else {
+        showToast("error", response.data.message || "Something went wrong");
       }
+    } catch (err) {
+      console.error(err);
+      showToast("error", "Failed to send OTP");
     }
   };
 
@@ -46,106 +31,79 @@ const ForgotPassword = () => {
     try {
       const response = await axiosInstance.post("/login/fp-otp-verification", { email, otp });
       const val = response.data.val;
-      switch (val) {
-        case 0:
-          console.log(response.data.message);
-          showToast("error", "Email or OTP not received");
-          break;
-        case 1:
-          console.log(response.data.message);
-          showToast("error", "Email not existed");
-          useNavigate("/signin");
-          setStep("email");
-          break;
-        case 2:
-          console.log(response.data.message);
-          showToast("success", "Verified successfully");
-          useNavigate("/login");
-          setStep("reset");
-          na
-          break;
-        case 3:
-          console.log(response.data.message);
-          showToast("error", "OTP invalid");
-          break;
-        default:
-          console.log("internal error");
-          showToast("error", "Internal error");
-          break;
+      if (val === 2) {
+        showToast("success", "OTP Verified");
+        setOtpVerified(true);
+      } else {
+        showToast("error", response.data.message || "OTP invalid");
       }
     } catch (err) {
-      console.log("error:", err);
+      console.error(err);
+      showToast("error", "OTP verification failed");
     }
   };
 
   const handlePasswordReset = async () => {
-    if (newPassword === confirmPassword) {
-      try {
-        const response = await axiosInstance.post("/login/resetpassword", { email, newPassword });
-        const val = response.data.val;
-        switch (val) {
-          case 0:
-            console.log(response.data.message);
-            showToast("error", "Email not existed");
-            break;
-          case 1:
-            console.log(response.data.message);
-            showToast("success", "Password reset successfully");
-            navigate("/login");
-            break;
-          case 2:
-            console.log(response.data.message);
-            showToast("error", "Internal error From server side");
-            break;
-          default:
-            console.log("internal error");
-            break;
-        }
-      } catch (err) {
-        console.log(err);
+    if (newPassword !== confirmPassword) {
+      return showToast("error", "Passwords do not match");
+    }
+
+    try {
+      const response = await axiosInstance.post("/login/resetpassword", { email, newPassword });
+      const val = response.data.val;
+      if (val === 1) {
+        showToast("success", "Password reset successfully");
+        navigate("/login");
+      } else {
+        showToast("error", response.data.message || "Password reset failed");
       }
-    } else {
-      showToast("error", "Passwords do not match");
+    } catch (err) {
+      console.error(err);
+      showToast("error", "Password reset error");
     }
   };
 
   return (
     <div className="forgot-password-container d-flex align-items-center justify-content-center vh-100">
       <div className="card p-4 shadow" style={{ width: "100%", maxWidth: "400px" }}>
-        <h2 className="text-center mb-4 text-primary">Forgot Password</h2>
-        {step === "email" ? (
-          <div>
-            <input
-              type="email"
-              className="form-control mb-3"
-              placeholder="Enter your email"
-              value={email}
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button className="btn btn-primary w-100" onClick={handleEmailSubmit}>
-              Send OTP
-            </button>
-          </div>
-        ) : step === "otp" ? (
-          <div>
-            <input
-              type="text"
-              className="form-control mb-3"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-            />
-            <button className="btn btn-primary w-100" onClick={handleOtpVerification}>
-              Verify OTP
-            </button>
-          </div>
-        ) : (
-          <div>
+        <h2 className="text-center mb-4 text-light">Forgot Password</h2>
+
+        {/* Email and Send OTP */}
+        <div className="d-flex mb-3">
+          <input
+            type="email"
+            className="form-control me-2"
+            placeholder="Enter your email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button className="btn btn-primary w-50" onClick={handleEmailSubmit}>
+          Send OTP
+          </button>
+        </div>
+
+        {/* OTP and Verify */}
+        <div className="d-flex mb-3">
+          <input
+            type="text"
+            className="form-control me-2"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
+          <button className="btn btn-primary" onClick={handleOtpVerification}>
+            Verify
+          </button>
+        </div>
+
+        {/* Password Reset (only after OTP verified) */}
+        {otpVerified && (
+          <>
             <input
               type="password"
               className="form-control mb-3"
-              placeholder="Set New Password"
+              placeholder="New Password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
@@ -156,10 +114,10 @@ const ForgotPassword = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <button className="btn btn-primary w-100" onClick={handlePasswordReset}>
+            <button className="btn btn-success w-100" onClick={handlePasswordReset}>
               Reset Password
             </button>
-          </div>
+          </>
         )}
       </div>
     </div>
