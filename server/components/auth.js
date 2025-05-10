@@ -113,7 +113,7 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
       }
 
       // Respond back with a success message
-      res.redirect("https://www.adjunct.in/home")
+      res.redirect(process.env.GOOGLE_REDIRECT || "https://www.adjunct.in/home")
       /*{res.redirect("https://localhost:5173/home")}*/
     } catch (err) {
       console.error('Error storing user data:', err);

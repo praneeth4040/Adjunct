@@ -1,0 +1,14 @@
+{
+    "name":"getUserDetails",
+    "description":"Get the details of a user by their token.",
+    "parameters": {
+        "type":"object",
+        "properties": {
+            "token": {
+                "type":"string",
+                "description":"The token of the user whose details are to be fetched."
+            }
+        },
+        "required":["token"]
+    }
+}

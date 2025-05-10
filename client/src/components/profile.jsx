@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "./totify";
 import axiosInstance from "../axiosConfig";
+// ✅ Import a proper Pen Icon
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 
 function Profile() {
   const navigate = useNavigate();
@@ -28,12 +30,10 @@ function Profile() {
         const response = await axiosInstance.post(
           "/getData",
           {},
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setUser(response.data.userRealData);
-        setName(response.data.userRealData.name); // pre-fill name for editing
+        setName(response.data.userRealData.name);
       } catch (error) {
         console.error("Error fetching user data:", error);
         showToast("error", "Failed to fetch user data");
@@ -59,7 +59,7 @@ function Profile() {
 
   const handleEditSubmit = async () => {
     try {
-      const response = await axiosInstance.put(
+      await axiosInstance.put(
         "/getData/update",
         { name, password },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -76,37 +76,18 @@ function Profile() {
     try {
       const res = await axiosInstance.delete(
         "/getData/removePermissions",
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log(res.data);
       showToast("info", res.data.message);
     } catch (err) {
       showToast("error", "Failed to remove permissions");
-    }
-  };
-  
-
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete your account?");
-    if (!confirmDelete) return;
-
-    try {
-      await axiosInstance.delete("/getData/delete", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      showToast("success", "Account deleted successfully");
-      handleLogout();
-    } catch (err) {
-      showToast("error", "Failed to delete account");
     }
   };
 
   if (loading) {
     return (
       <div style={styles.loadingContainer}>
-        Loading...
+        <p>Loading your profile...</p>
       </div>
     );
   }
@@ -114,7 +95,7 @@ function Profile() {
   if (!user) {
     return (
       <div style={styles.loadingContainer}>
-        No user data found. Please log in again.
+        <p>No user data found. Please log in again.</p>
       </div>
     );
   }
@@ -123,80 +104,59 @@ function Profile() {
 
   return (
     <div style={styles.page}>
-      <div
-        className="card"
-        style={styles.card}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <div className="card-body">
-          <div className="mb-4">
-            <img
-              src={profileImage}
-              alt="Profile"
-              className="rounded-circle"
-              style={styles.profileImage}
-            />
-          </div>
-
-          {editing ? (
-            <>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="New Name"
-                style={styles.input}
-              />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="New Password"
-                style={styles.input}
-              />
-              <button style={styles.button} onClick={handleEditSubmit}>
-                Save Changes
-              </button>
-              <button
-                style={{ ...styles.button, backgroundColor: "#555" }}
-                onClick={() => setEditing(false)}
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              <h5 style={styles.userName}>{user.name}</h5>
-              <div className="mb-4">
-                <h6 style={styles.label}>User Email</h6>
-                <p style={styles.text}>{user.email}</p>
-              </div>
-
-              <button style={styles.button} onClick={() => setEditing(true)}>
-                Edit Profile
-              </button>
-              <button
-                style={{ ...styles.button, backgroundColor: "#DC143C" }}
-                onClick={handleRemovePermissions}
-              >
-                Remove Permissions
-              </button>
-              <button
-                style={{ ...styles.button, backgroundColor: "#8B0000" }}
-                onClick={handleDeleteAccount}
-              >
-                Delete Account
-              </button>
-              <button
-                style={{ ...styles.button, backgroundColor: "#FFA500" }}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </>
+      <div style={styles.card}>
+        <div style={styles.topRight}>
+          {!editing && (
+            <button style={styles.editButton} onClick={() => setEditing(true)}>
+              <PencilSquareIcon style={styles.editIcon} />
+              <span style={styles.editText}>Edit Profile</span>
+            </button>
           )}
         </div>
+
+        <div style={styles.center}>
+          <img
+            src={profileImage}
+            alt="Profile"
+            style={styles.profileImage}
+          />
+          <h2 style={styles.userName}>{user.name}</h2>
+          <p style={styles.userEmail}>{user.email}</p>
+        </div>
+
+        {editing ? (
+          <>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="New Name"
+              style={styles.input}
+            />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="New Password"
+              style={styles.input}
+            />
+            <button style={styles.primaryButton} onClick={handleEditSubmit}>
+              Save Changes
+            </button>
+            <button style={styles.secondaryButton} onClick={() => setEditing(false)}>
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button style={styles.primaryButton} onClick={handleRemovePermissions}>
+              Remove Permissions
+            </button>
+            <button style={{ ...styles.primaryButton, backgroundColor: "#DC143C", color: "#fff" }} onClick={handleLogout}>
+              Log Out
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -205,73 +165,111 @@ function Profile() {
 const styles = {
   page: {
     minHeight: "100vh",
-    backgroundColor: "#0D1117",
-    color: "white",
+    backgroundColor: "#000",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     padding: "20px",
   },
   card: {
-    width: "26rem",
-    borderRadius: "15px",
-    backgroundColor: "#161B22",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
-    padding: "25px",
+    position: "relative",
+    backgroundColor: "#1a1a1a",
+    color: "#FFA500",
+    borderRadius: "12px",
+    padding: "2rem",
+    width: "100%",
+    maxWidth: "400px",
     textAlign: "center",
-    transition: "transform 0.3s ease",
+    boxShadow: "0 10px 20px rgba(255, 165, 0, 0.2)",
+  },
+  topRight: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+  },
+  editButton: {
+    background: "transparent",
+    border: "none",
+    color: "#FFA500",
+    fontSize: "0.9rem",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+  },
+  editIcon: {
+    width: "20px",
+    height: "20px",
+    color: "#FFA500",
+    marginRight: "6px",
+  },
+  editText: {
+    color: "#FFA500",
+    fontWeight: "bold",
+  },
+  center: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: "1rem",
   },
   profileImage: {
-    width: "120px",
-    height: "120px",
-    objectFit: "cover",
-    margin: "0 auto",
-    border: "4px solid #FFA500",
+    width: "100px",
+    height: "100px",
     borderRadius: "50%",
-  },
-  userName: {
-    color: "#FFA500",
-    fontSize: "1.5rem",
-    fontWeight: "bold",
+    border: "3px solid #FFA500",
     marginBottom: "10px",
   },
-  label: {
-    color: "#FFA500",
-    fontSize: "1rem",
-    fontWeight: "600",
+  userName: {
+    fontSize: "1.5rem",
+    marginBottom: "5px",
   },
-  text: {
-    color: "white",
+  userEmail: {
     fontSize: "0.9rem",
-    wordBreak: "break-word",
-  },
-  button: {
-    backgroundColor: "#9da5a8",
-    color: "white",
-    fontSize: "1rem",
-    fontWeight: "bold",
-    borderRadius: "10px",
-    padding: "10px 20px",
-    border: "none",
-    width: "100%",
-    marginTop: "10px",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
+    color: "#FFA500",
+    marginBottom: "1rem",
   },
   input: {
     width: "100%",
-    padding: "10px",
+    padding: "0.6rem",
     margin: "8px 0",
     borderRadius: "8px",
-    border: "1px solid #ccc",
+    border: "1px solid #FFA500",
+    backgroundColor: "#333",
+    color: "#FFA500",
+  },
+  primaryButton: {
+    width: "100%",
+    padding: "0.7rem",
+    marginTop: "10px",
+    borderRadius: "25px",
+    border: "none",
+    backgroundColor: "#FFA500",
+    color: "#000",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  },
+  secondaryButton: {
+    width: "100%",
+    padding: "0.7rem",
+    marginTop: "10px",
+    borderRadius: "25px",
+    backgroundColor: "#555",
+    color: "#fff",
+    border: "none",
+    fontWeight: "bold",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
   },
   loadingContainer: {
     minHeight: "100vh",
-    backgroundColor: "#000000",
-    color: "white",
+    backgroundColor: "#000",
+    color: "#FFA500",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    fontSize: "1.2rem",
+    fontWeight: "bold",
   },
 };
 

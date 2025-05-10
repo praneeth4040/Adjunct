@@ -1,4 +1,4 @@
-const {
+/*{const {
   GoogleGenerativeAI,
   HarmCategory,
   HarmBlockThreshold,
@@ -127,4 +127,149 @@ let tofrontend = sending
     throw new Error("Failed to parse JSON response from the model.");
   }
 }
-module.exports=generator;
+module.exports=generator;}*/
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const apiKey = process.env.GEMINI_API;
+const genAI = new GoogleGenerativeAI(apiKey);
+
+const weatherSchema = require("../JSON/weatherSchema.json");
+const sendEmailSchema = require("../JSON/sendEmailSchema.json");
+const handleFunctionCall = require("./functionHandler");
+
+const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-exp",
+});
+
+const generationConfig = {
+    temperature: 1,
+    topP: 0.95,
+    topK: 40,
+    maxOutputTokens: 8192,
+};
+
+const tools = [
+    {
+        functionDeclarations: [
+            {
+                name: weatherSchema.name,
+                description: weatherSchema.description,
+                parameters: weatherSchema.parameters,
+            },
+            {
+                name: sendEmailSchema.name,
+                description: sendEmailSchema.description,
+                parameters: sendEmailSchema.parameters,
+            }
+        ]
+    }
+];
+
+async function generator(prompt,history, userDetails = {}) {
+    console.log("History:", history);
+    console.log("User Details:", userDetails);
+
+    const context = [...history,
+      {
+        role: "user",
+        parts: [
+            {
+                text: `You are an AI assistant named AssistBot. Your job is to help the user with tasks. The user's name is ${userDetails.name} and their email is ${userDetails.email}.
+
+                When the user asks you to write an email, your process should be:
+
+                1.  **Understand the email's purpose and recipient.**
+                2.  **Automatically generate a concise subject and a detailed body for the email.**
+                3.  **Present the complete drafted email (subject and body) to the user in a clear, readable format.**
+                4.  **Then, ask the user for confirmation to send the email.**
+
+                For example, if the user says "Write an email to john.doe@example.com about the meeting tomorrow at 10 AM", you should generate the subject and body yourself and show it to the user.
+
+                User Prompt: ${prompt}`
+            }
+        ]
+    }
+    ];
+    const MAX_LOOPS = 5;
+    let loopCount = 0;
+
+    while (loopCount < MAX_LOOPS) {
+        const response = await model.generateContent({
+            contents: context,
+            generationConfig,
+            tools,
+        });
+
+        const part = response?.response?.candidates?.[0]?.content?.parts?.[0];
+
+        if (part?.functionCall) {
+            const functionCall = part.functionCall;
+
+            // Add the model's function call to the context
+            context.push({
+                role: "model",
+                parts: [{ functionCall }]
+            });
+
+            const result = await handleFunctionCall(functionCall);
+
+            context.push({
+                role: "function",
+                parts: [
+                    {
+                        functionResponse: {
+                            name: functionCall.name,
+                            response: result
+                        }
+                    }
+                ]
+            });
+
+            loopCount++;
+        } else if (part?.text) {
+            const text = part.text.trim().toLowerCase();
+
+            // Check if the user is confirming the email in this turn
+            if (text.includes("yes") || text.includes("send it") || text.includes("ok")) {
+                // Look back in the history for a potential sendEmail function call
+                const sendEmailCall = history.find(
+                    (item) => item.role === "model" && item.parts?.[0]?.functionCall?.name === "sendEmail"
+                )?.parts?.[0]?.functionCall;
+
+                if (sendEmailCall) {
+                    const result = await handleFunctionCall({ ...sendEmailCall, args: { ...sendEmailCall.args, confirmed: true } });
+                    return {
+                        status: "email_sent",
+                        message: `✅ Email sent to ${sendEmailCall.args.to} with subject "${sendEmailCall.args.subject}".`,
+                        updatedHistory: context
+                    };
+                } else {
+                    return {
+                        status: "final_response",
+                        message: part.text, // Or a message like "No email to confirm."
+                        updatedHistory: context
+                    };
+                }
+            } else {
+                return {
+                    status: "final_response",
+                    message: part.text,
+                    updatedHistory: context
+                };
+            }
+        } else {
+            return {
+                status: "error",
+                message: "No function call or meaningful response generated.",
+                updatedHistory: context
+            };
+        }
+    }
+
+    return {
+        status: "loop_limit_reached",
+        message: "⚠️ Reached maximum function call loop limit.",
+        updatedHistory: context
+    };
+}
+
+module.exports = generator;
