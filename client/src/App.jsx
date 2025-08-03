@@ -30,10 +30,10 @@ function App() {
     {
       path: '/home',
       element: (
-        <PrivateRoute>
-          <Navbar />
-          <Home />
-        </PrivateRoute>
+        <><Navbar/>
+        <Home /></>
+          
+  
       ),
     },
     {
