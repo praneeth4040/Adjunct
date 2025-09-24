@@ -5,7 +5,7 @@ Adjunct is an AI-powered personal assistant that helps you write and send profes
 Just type your intent — Adjunct generates, refines, and sends it via Gmail for you.
 
 ---
-Live :- www.adjunct.in
+Live :- [https://adjunct-flax.vercel.app/]
 
 ## ✨ Features
 
